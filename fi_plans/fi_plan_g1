@@ -1,0 +1,8 @@
+Created: Wed Oct 27 09:29:12 2021
+----------------------------------
+Robot Camera: None
+Camera Type: TOF
+Fault Inj. Type: Offline
+Fault Type: Gaussian
+Fault Rate: 19%
+Random FI: True

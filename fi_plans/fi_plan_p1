@@ -1,0 +1,8 @@
+Created: Wed Oct 27 09:32:07 2021
+----------------------------------
+Robot Camera: None
+Camera Type: TOF
+Fault Inj. Type: Offline
+Fault Type: Poisson
+Fault Rate: 26%
+Random FI: True
