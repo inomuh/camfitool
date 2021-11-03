@@ -28,3 +28,4 @@ Roadmap For Next Updates:
 * [ ] RGB Camera FI
 * [ ] Real-Time Type Fault Injection
 * [ ] ROS Noetic Integration
+* [ ] More Fault Types
