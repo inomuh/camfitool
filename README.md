@@ -1,6 +1,6 @@
 ## Camera Fault Injection Demo Tool
 
-This tool is a simple interface that allows injection of image errors into robot cameras. Thanks to this interface, you can create new image libraries by injecting the error types you have determined, both live to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information on the purpose of this system: https://arxiv.org/abs/2108.13803
+This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information on the purpose of this system: https://arxiv.org/abs/2108.13803
 
 ![Image of CamFIDemoTool](https://github.com/inomuh/Camera-Fault-Injection-Demo-Tool/blob/main/camfidemotool_v1.1.png)
 
