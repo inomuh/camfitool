@@ -1,5 +1,9 @@
 ## Camera Fault Injection Demo Tool
 
+
+![Image of CamFIDemoTool](https://github.com/inomuh/Camera-Fault-Injection-Demo-Tool/blob/main/camfidemotool_v1.1.png)
+
+
 Using this tool you can:
 
 - You can apply the faults you choose in the configuration menu to the images in the image library you want, and save these wrong images to the folder you want.
