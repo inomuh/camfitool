@@ -385,9 +385,6 @@ class MainWindow(QMainWindow):
         - You can specify the rate of fault to be applied.
         - For now, three different fault types can be applied offline to images (with .bmp extension) obtained from TOF camera.
         
-        ## Changelog (28.10.21) ##
-        - TR localization added.
-        
         """)
         msgBox.setWindowTitle("Help")
         msgBox.setStandardButtons(QMessageBox.Ok)
