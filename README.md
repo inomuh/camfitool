@@ -35,7 +35,7 @@ Update v1.2 - 10.11.21
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
 -------------------------
-* [x] Offline Type Fault Injection (RGB and TOF cameras)
+* [x] Offline Type Fault Injection
 * [x] TOF Camera FI
 * [x] Randomized FI Feature
 * [x] Three Fault Types (Salt&Pepper, Gaussian, Poisson)
