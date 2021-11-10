@@ -555,7 +555,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.header_title_label.setText(_translate("MainWindow", "  Camera Fault Injector Demo Tool"))
+        self.header_title_label.setText(_translate("MainWindow", "  Camera Fault Injector Tool"))
         self.robot_camera_button.setText(_translate("MainWindow", "Robot Cam"))
         self.image_file_label.setText(_translate("MainWindow", "Normal Image Folders"))
         self.fi_file_label.setText(_translate("MainWindow", "FI Image Folders"))

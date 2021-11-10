@@ -143,7 +143,7 @@
              </font>
             </property>
             <property name="text">
-             <string>  Camera Fault Injector Demo Tool</string>
+             <string>  Camera Fault Injector Tool</string>
             </property>
            </widget>
           </item>
@@ -1178,6 +1178,7 @@ color: rgb(255, 255, 255);</string>
   <include location="icons/icons.qrc"/>
   <include location="icons/icons.qrc"/>
   <include location="icons/icons.qrc"/>
+  <include location="../../../../.designer/backup/icons/icons.qrc"/>
  </resources>
  <connections/>
 </ui>
