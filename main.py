@@ -5,11 +5,13 @@ import time
 
 from os import listdir
 from os.path import isfile, join
+from typing import Tuple
 
 from ui_interface import *
 from qt_core import *
 
-from tof_fault_injector_ui import main as tfi
+from offline_fault_injector_ui import main as ofi
+from realtime_fault_injector_ui import RealtimeFaultInjector as rfi
 
 
 class MainWindow(QMainWindow):
@@ -24,10 +26,11 @@ class MainWindow(QMainWindow):
 
         QSizeGrip(self.ui.size_grip)
 
-        self.ui.camera_type_combobox.addItems(['--Select one--','TOF','RGB (Under-Development)'])
-        self.ui.fi_type_combobox.addItems(['--Select one--','Offline','Real-time (Under-Development)'])
+        self.ui.camera_type_combobox.addItems(['--Select one--','TOF','RGB'])
+        self.ui.fi_type_combobox.addItems(['--Select one--','Offline','Real-time'])
 
         self.ui.fi_type_combobox.currentTextChanged.connect(self.real_time_options)
+        self.ui.robot_camera_combobox.currentTextChanged.connect(self.ros_camera_options)
         self.ui.camera_type_combobox.currentTextChanged.connect(self.camera_type_options)
 
         self.ui.fault_rate_textbrowser.setPlainText("-")
@@ -41,10 +44,18 @@ class MainWindow(QMainWindow):
         self.ui.about_button.clicked.connect(lambda: self.about_section())
         self.ui.show_fi_plan_details_button.clicked.connect(lambda: self.details_fi_list_func())
         self.ui.progressBar.setValue(0)
-
+        
+        # Robot Camera butonuna basıldığında, robot_camera değişkenindeki ros düğümü izlemeye alınır.
+        self.robot_camera = "right_rokos/color_camera/image_raw"
+        self.publish_camera = "right_rokos/color_camera/image_raw_faulty"
+        self.ui.robot_camera_button.clicked.connect(lambda: self.robot_camera_live(self.robot_camera, self.publish_camera))
+        
         # Arayüz açıldığında default normal ve hatalı resim klasörleri ile fi plan listesi otomatik olarak yüklenir.  
         self.starter_folder_indexes()
-
+        
+        # ROS Cam Text ve ROS Stream Freq sekmelerinin yazı tiplerinin ve boyutlarının ayarlandığı kısım
+        self.default_robot_camera_configs()
+        
         self.ui.info_text.setText("Welcome to Camera Fault Injector Demo Tool v1.2")
         self.show()
 
@@ -52,6 +63,7 @@ class MainWindow(QMainWindow):
         """
         Test fonksiyonu
         """
+        print("test")
         pass
 
     def starter_folder_indexes(self):
@@ -151,15 +163,69 @@ class MainWindow(QMainWindow):
 
         """
         
-        if self.ui.fi_type_combobox.currentText() == "Real-time (Under-Development)":
+        if self.ui.fi_type_combobox.currentText() == "Real-time":
             self.ui.robot_camera_combobox.clear()
             self.ui.robot_camera_combobox.addItems(['--Select one--','ROS Camera'])
+            #self.ui.randomize_check.setText("CV2 Screen")
+            self.ui.randomize_check.setEnabled(False)
+
+            # TOF Realtime özelliği eklenince silinecek
+            self.ui.camera_type_combobox.clear()
+            self.ui.camera_type_combobox.addItems(['--Select one--','TOF (Under-development)','RGB'])
+
         elif self.ui.fi_type_combobox.currentText() == "Offline":
             self.ui.robot_camera_combobox.clear()
-            self.ui.robot_camera_combobox.addItems(['--Select one--', 'None'])
+            self.ui.robot_camera_combobox.addItems(['None'])
+            #self.ui.randomize_check.setText("Randomize")
+            self.ui.randomize_check.setEnabled(True)
+
+            # TOF Realtime özelliği eklenince silinecek
+            self.ui.camera_type_combobox.clear()
+            self.ui.camera_type_combobox.addItems(['--Select one--','TOF','RGB'])
+
         else:
             self.ui.robot_camera_combobox.clear()
             self.ui.robot_camera_combobox.addItems(['None'])
+    
+    def ros_camera_options(self):
+        """
+        Robot Camera  menusünün ayarlandığı fonksiyondur. ROS Camera seçildiğinde, kullanıcıdan realtime hata uygulanması istenen ROS kamera topiğinin
+        ismini girebileceği bir text bar aktif hale gelecektir. None seçildiğinde ise bu kısım kaybolur.
+
+        """
+        if self.ui.robot_camera_combobox.currentText() == "ROS Camera":
+
+            self.ui.ros_cam_topic_label.setEnabled(True)
+            self.ui.ros_cam_topic_text.setEnabled(True)
+            self.ui.ros_cam_fi_freq_label.setEnabled(True)
+            self.ui.ros_cam_fi_freq_text.setEnabled(True)
+            self.ui.ros_cam_topic_text.setReadOnly(False)
+            self.ui.ros_cam_fi_freq_text.setReadOnly(False)
+            self.ui.ros_cam_topic_label.setText("ROS Cam. Topic  ")
+            
+            self.ui.ros_cam_topic_text.setText("Enter here ROS Camera Topic name ")
+            self.ui.ros_cam_fi_freq_label.setText("Cam. Stream Freq (Hz)  ")
+            self.ui.ros_cam_fi_freq_text.setText("Enter here ROS Stream Frequency value")
+            self.robot_camera = self.ui.ros_cam_topic_text.toPlainText()
+            self.fi_freq = self.ui.ros_cam_fi_freq_text.toPlainText()
+            
+            # Robot Camera konfigürasyonlarında düzenleme yapıldığında fontları ve yazı boyutunu düzenler.
+            self.ui.ros_cam_topic_text.textChanged.connect(self.update_ros_cam_topic_config)
+            self.ui.ros_cam_fi_freq_text.textChanged.connect(self.update_ros_cam_fi_freq_config)
+        else:
+            
+            self.ui.ros_cam_topic_label.setEnabled(False)
+            self.ui.ros_cam_topic_text.setEnabled(False)
+            self.ui.ros_cam_fi_freq_label.setEnabled(False)
+            self.ui.ros_cam_fi_freq_text.setEnabled(False)
+            self.ui.ros_cam_topic_text.setReadOnly(True)
+            self.ui.ros_cam_fi_freq_text.setReadOnly(True)
+            self.ui.ros_cam_topic_label.setText(" ")
+            self.ui.ros_cam_fi_freq_label.setText(" ")
+            self.ui.ros_cam_topic_text.clear()
+            self.ui.ros_cam_fi_freq_text.clear()
+            self.default_robot_camera_configs()
+
 
 
     def camera_type_options(self):
@@ -167,9 +233,9 @@ class MainWindow(QMainWindow):
         Camera Type menusünün ayarlandığı fonksiyondur. Camera tipi RGB ya da TOF seçildiğinde ona göre Fault Type menusünü düzenler.
         """
 
-        if self.ui.camera_type_combobox.currentText() == "RGB (Under-Development)":
+        if self.ui.camera_type_combobox.currentText() == "RGB":
             self.ui.fault_type_combobox.clear()
-            self.ui.fault_type_combobox.addItems(['--Select one--','Open','Close','Erosion','Dilation','Gradient','Motion-blur','Partialloss'])        
+            self.ui.fault_type_combobox.addItems(['--Select one--','Open','Close','Erosion','Dilation','Gradient','Motion-blur','Partialloss (Under-development)'])        
         elif self.ui.camera_type_combobox.currentText() == "TOF":
             self.ui.fault_type_combobox.clear()
             self.ui.fault_type_combobox.addItems(['--Select one--','Salt&Pepper','Gaussian','Poisson'])
@@ -185,66 +251,111 @@ class MainWindow(QMainWindow):
         kaydı işlemini başlatır. 
         
         """
-        
-        print("Processing..")
-        # Hata uygulama işlemi başladığında Apply Fault butonu çalışmaz hale getirilir. Hata işlemi tamamlandıktan sonra buton yeniden
-        # çalışır hale döndürülür.
 
-        self.ui.apply_fault_button.setEnabled(False)
-        self.ui.apply_fault_button.setStyleSheet("background-color: rgb(255, 255, 255);"
-                                                    "color: rgb(0, 0, 0);")
-        self.ui.apply_fault_button.setText("Processing")
-        self.ui.apply_fault_button.setIcon(QtGui.QIcon(":icons/cil-external-link.png"))
+        #### OFFLINE FAULT INJECTION PART ####
+        if self.ui.fi_type_combobox.currentText() == "Offline":
+            
+            print("Processing..")
+            # Hata uygulama işlemi başladığında Apply Fault butonu çalışmaz hale getirilir. Hata işlemi tamamlandıktan sonra buton yeniden
+            # çalışır hale döndürülür.
 
-        plan_from_list = False  # Kaydedilen plan listesinden plan seçilip uygulama eklendiğinde bu satır kaldırılacak.   
-        if plan_from_list == True:
-            try:
-                self.ui.info_text.clear()
-                f = open(str(self.get_current_workspace())+'/fi_plans/'+self.fi_plan, "r")
-                self.ui.info_text.setText("FI Plan Applying ...\n-----------------\n"+f.read())
-            except:
-                self.pop_up_message('Please choose one fault injection plan from "FI Plans"!')
+            self.ui.apply_fault_button.setEnabled(False)
+            self.ui.apply_fault_button.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                                        "color: rgb(0, 0, 0);")
+            self.ui.apply_fault_button.setText("Processing")
+            self.ui.apply_fault_button.setIcon(QtGui.QIcon(":icons/cil-external-link.png"))
+
+            plan_from_list = False  # Kaydedilen plan listesinden plan seçilip uygulama eklendiğinde bu satır kaldırılacak.   
+            if plan_from_list == True:
+                try:
+                    self.ui.info_text.clear()
+                    f = open(str(self.get_current_workspace())+'/fi_plans/'+self.fi_plan, "r")
+                    self.ui.info_text.setText("FI Plan Applying ...\n-----------------\n"+f.read())
+                except:
+                    self.pop_up_message('Please choose one fault injection plan from "FI Plans"!')
+                else:
+                    if self.ui.randomize_check.isChecked() == True:
+                        print("randomized")
+                    else:
+                        print("unrandomized")
             else:
+                #### APPLY FAULT SECTION ############
+                self.info_temp()
+                file_path = self.get_current_workspace()
+                ## Normal ve Hatalı resimler tablosunda tıklanmış olan klasör işleme konur.
+                # Adresler değişmeli, seçtiğimiz klasörün konumu otomatik gelmeli.
+                try:           
+                    normal_image_file = str(file_path)+"/images/normal_image_folders/"+str(self.ui.image_file_tree.selectedIndexes()[0].data())+"/"
+                    fi_image_file = str(file_path)+"/images/fault_image_folders/"+str(self.ui.fi_file_tree.selectedIndexes()[0].data())+"/"
+                    randomized = self.ui.randomize_check.isChecked()
+                    resource, count, fi_image_name_list = ofi(normal_image_file, fi_image_file, self.camera_type, self.fault_type, self.fault_rate, randomized)
+                    
+                    ###################################
+                    # Randomize seçeneği aktifken, sistem rastgele sayıda hatalı resim oluşturur. Hata basılan resimler rastgele seçilir.
+                    #   
+                    if randomized:
+                        self.progress_counter(count)
+                        self.ui.info_text.setPlainText(resource+str("\nFault Injected Files:\n")+str(fi_image_name_list))
+
+                    else:
+                        self.progress_counter(count)
+                        self.ui.info_text.setPlainText(resource)
+                except (IndexError):
+                    self.pop_up_message("Please choose one Normal and one Fault image folders from Folder Selection Section on the left side.")
+                except:
+                    self.pop_up_message("Something wrong!")
+    
+            print("Completed..")
+
+            # Fault uygulama tamamlandığında, Apply Fault butonu eski haline getirilir.
+            self.ui.apply_fault_button.setDisabled(False)
+            self.ui.apply_fault_button.setStyleSheet("background-color: rgb(6, 37, 98);"
+                                                        "color: rgb(255, 255, 255);")
+            self.ui.apply_fault_button.setText("Apply Fault")
+            self.ui.apply_fault_button.setIcon(QtGui.QIcon(":icons/cil-cloud-upload.png"))
+        
+        #### REALTIME FAULT INJECTION PART ####
+        elif self.ui.fi_type_combobox.currentText() == "Real-time":
+            print("Processing..")
+            self.ui.info_text.setText("Fault injecting to the ROS camera stream...")
+            self.robot_camera = self.ui.ros_cam_topic_text.toPlainText()
+            self.pop_up_message("This process will be broken this interface. This will be fixed.")
+            
+            plan_from_list = False  # Kaydedilen plan listesinden plan seçilip uygulama eklendiğinde bu satır kaldırılacak.   
+            
+            if plan_from_list == True:
+                try:
+                    self.ui.info_text.clear()
+                    f = open(str(self.get_current_workspace())+'/fi_plans/'+self.fi_plan, "r")
+                    self.ui.info_text.setText("FI Plan Applying ...\n-----------------\n"+f.read())
+                except:
+                    self.pop_up_message('Please choose one fault injection plan from "FI Plans"!')
+            else:
+                self.info_temp()
+                cv2_screen = False # default
+
+                ## Randomized fonksiyonu, realtime modunda CV2 Screen moduna dönüşür. Kullanıcı isterse hata yayınını 
+                ## CV2 panelinden ayrıca görüntüleyebilir.
+
                 if self.ui.randomize_check.isChecked() == True:
-                    print("randomized")
+                    cv2_screen == True
                 else:
-                    print("unrandomized")
-        else:
-            #### APPLY FAULT SECTION ############
-            self.info_temp()
-            file_path = self.get_current_workspace()
-            ## Normal ve Hatalı resimler tablosunda tıklanmış olan klasör işleme konur.
-            # Adresler değişmeli, seçtiğimiz klasörün konumu otomatik gelmeli.
-            try:           
-                normal_image_file = str(file_path)+"/images/normal_image_folders/"+str(self.ui.image_file_tree.selectedIndexes()[0].data())+"/"
-                fi_image_file = str(file_path)+"/images/fault_image_folders/"+str(self.ui.fi_file_tree.selectedIndexes()[0].data())+"/"
-                randomized = self.ui.randomize_check.isChecked()
-                resource, count, fi_image_name_list = tfi(normal_image_file, fi_image_file, self.fault_type, self.fault_rate, randomized)
+                    cv2_screen == False
+
+                self.publish_camera = self.robot_camera ## Değişecek.
+
+                try:
+                    ## Eğer kullanıcı int bir değer yerine str girişi yaparsa sistem hata mesajı verir, apply_fault çalışmaz.
+                    self.fi_freq = int(self.ui.ros_cam_fi_freq_text.toPlainText())
+                except ValueError:
+                    self.pop_up_message("Please enter a valid frequency value!")
+                else:
+                    rfi(self.robot_camera, self.publish_camera, self.camera_type, self.fault_type, self.fault_rate, self.fi_freq, cv2_screen)
                 
-                ###################################
-                # Randomize seçeneği aktifken, sistem rastgele sayıda hatalı resim oluşturur. Hata basılan resimler rastgele seçilir.
-                #   
-                if randomized:
-                    self.progress_counter(count)
-                    self.ui.info_text.setPlainText(resource+str("\nFault Injected Files:\n")+str(fi_image_name_list))
 
-                else:
-                    self.progress_counter(count)
-                    self.ui.info_text.setPlainText(resource)
-            except (IndexError):
-                self.pop_up_message("Please choose one Normal and one Fault image folders from Folder Selection Section on the left side.")
-            except:
-                self.pop_up_message("Something wrong!")
- 
-        print("Completed..")
-
-        # Fault uygulama tamamlandığında, Apply Fault butonu eski haline getirilir.
-        self.ui.apply_fault_button.setDisabled(False)
-        self.ui.apply_fault_button.setStyleSheet("background-color: rgb(6, 37, 98);"
-                                                    "color: rgb(255, 255, 255);")
-        self.ui.apply_fault_button.setText("Apply Fault")
-        self.ui.apply_fault_button.setIcon(QtGui.QIcon(":icons/cil-cloud-upload.png"))
-
+        else:
+            self.pop_up_message("Error")
+        
     def progress_counter(self, count):
         """
         Progress barını kontrol eden fonksiyondur.
@@ -274,36 +385,68 @@ class MainWindow(QMainWindow):
         adlı geçici bir dosyaya kaydeder, o dosyadan revize edilen info bilgisini Info sekmesine yazıp temp dosyasını siler.
         """
         try:
-
+            
+            
             self.robot_camera_type = self.ui.robot_camera_combobox.currentText()
             self.camera_type = self.ui.camera_type_combobox.currentText()
             self.fi_type = self.ui.fi_type_combobox.currentText()
             self.fault_type = self.ui.fault_type_combobox.currentText()
 
-            f = open("temp.txt", "a")
-            f.write("Robot Camera: ")
-            f.write(self.robot_camera_type)
-            f.write("\nCamera Type: ")
-            f.write(self.camera_type)
-            f.write("\nFault Inj. Type: ")
-            f.write(self.fi_type)
-            f.write("\nFault Type: ") 
-            f.write(self.fault_type)
-            f.write("\nFault Rate: ")
-            f.write(self.fault_rate)
-            f.write("%")
+            if self.fi_type == "Offline":
+                f = open("temp.txt", "a")
+                f.write("Robot Camera: ")
+                f.write(self.robot_camera_type)
+                f.write("\nCamera Type: ")
+                f.write(self.camera_type)
+                f.write("\nFault Inj. Type: ")
+                f.write(self.fi_type)
+                f.write("\nFault Type: ") 
+                f.write(self.fault_type)
+                f.write("\nFault Rate: ")
+                f.write(self.fault_rate)
+                f.write("%")
+            else:
+                
+                self.ros_cam_topic = self.ui.ros_cam_topic_text.toPlainText()
+                self.ros_cam_fi_freq = self.ui.ros_cam_fi_freq_text.toPlainText()
+
+                f = open("temp.txt", "a")
+                f.write("Robot Camera: ")
+                f.write(self.robot_camera_type)
+                f.write("\nROS Camera Topic: ")
+                f.write(self.ros_cam_topic)
+                f.write("\nROS Camera FI Stream Freq: ")
+                f.write(self.ros_cam_fi_freq)
+                f.write("Hz")
+                f.write("\nCamera Type: ")
+                f.write(self.camera_type)
+                f.write("\nFault Inj. Type: ")
+                f.write(self.fi_type)
+                f.write("\nFault Type: ") 
+                f.write(self.fault_type)
+                f.write("\nFault Rate: ")
+                f.write(self.fault_rate)
+                f.write("%")
 
         except AttributeError:
             self.pop_up_message("Fault Rate Missing!")
 
         else:
 
-            if self.ui.randomize_check.isChecked() == True:
-                f.write("\nRandom FI: True")
-            elif self.ui.randomize_check.isChecked() == False:
-                f.write("\nRandom FI: False")
-            else:
-                pass
+            if self.fi_type == "Offline":
+                if self.ui.randomize_check.isChecked() == True:
+                    f.write("\nRandom FI: True")
+                elif self.ui.randomize_check.isChecked() == False:
+                    f.write("\nRandom FI: False")
+                else:
+                    pass
+            #else:
+            #    if self.ui.randomize_check.isChecked() == True:
+            #        f.write("\nCV2 Screen: True")
+            #    elif self.ui.randomize_check.isChecked() == False:
+            #        f.write("\nCV2 Screen: False")
+            #    else:
+            #        pass 
 
             f.close()
             f = open("temp.txt", "r")
@@ -384,7 +527,7 @@ class MainWindow(QMainWindow):
         - You can save the configuration of the fault you have applied, and view the fault plans you have saved as you wish.
         - You can specify the rate of fault to be applied.
         - For now, three different fault types can be applied offline to images (with .bmp extension) obtained from TOF camera.
-        
+       
         """)
         msgBox.setWindowTitle("Help")
         msgBox.setStandardButtons(QMessageBox.Ok)
@@ -405,8 +548,6 @@ class MainWindow(QMainWindow):
 
         return self.fault_rate
 
-
-
     def details_fi_list_func(self):
         """
         Update FIP List butonunun tanımlandığı fonksiyondur. FI Plans listesinde yer alan bir plan seçildiğinde bu butonla ilgili
@@ -426,6 +567,49 @@ class MainWindow(QMainWindow):
         self.fi_plan = Item.text()
         print(self.fi_plan)
         return self.fi_plan
+
+    def robot_camera_live(self, robot_camera, publish_camera):
+        """
+        Real-time hata enjeksiyonunda, yayın yapan kameranın bir başka terminal aracılığıyla açılmasını sağlayan butonun fonksiyonudur.
+        """
+        
+        rc = self.ui.robot_camera_combobox.currentText() # Arayüzde ROS Camera seçili olup olmadığı kontrol edilir.
+        
+        # Kullanıcı ros_cam_topic_text sekmesine herhangi bir topic ismi girmeden tuşa basarsa bu uyarıyı alır.
+        ros_cam_topic_name = self.ui.ros_cam_topic_text.toPlainText()
+        if ros_cam_topic_name == "Enter here ROS Camera Topic name ":
+            self.pop_up_message('Please enter ROS Camera topic name into the "ROS Cam. Topic" section!')
+        else:
+            if rc == "ROS Camera":
+                # publish_camera da seçilebilir. robot_camera, yayınlanan kameranın topiğini temsil eder, publish_camera ise istenen bir başka
+                # topic ismidir.
+                robot_camera = self.ui.ros_cam_topic_text.toPlainText()
+                os.system("gnome-terminal -x rosrun image_view image_view image:=" + robot_camera) 
+            else:
+                self.pop_up_message('ROS Camera connection failed.')
+
+    def default_robot_camera_configs(self):
+        """
+        Robot Camera aktifken açılan konfigürasyon ayarlamalarının arayüz biçimlerini düzenleyen fonksiyondur.
+        """
+        self.ui.ros_cam_topic_text.setFontItalic(True)
+        self.ui.ros_cam_fi_freq_text.setFontItalic(True)
+        self.ui.ros_cam_topic_text.setFontPointSize(9.0)
+        self.ui.ros_cam_fi_freq_text.setFontPointSize(9.0)
+    
+    def update_ros_cam_topic_config(self):
+        """
+        ROS Camera konfigürasyonunda değişiklik yapıldığında fontları ve yazı boyutunu güncelleyen fonksiyondur.
+        """
+        self.ui.ros_cam_topic_text.setFontItalic(False)
+        self.ui.ros_cam_topic_text.setFontPointSize(11.0)
+    
+    def update_ros_cam_fi_freq_config(self):
+        """
+        ROS Stream Frequency konfigürasyonunda değişiklik yapıldığında fontları ve yazı boyutunu güncelleyen fonksiyondur.
+        """
+        self.ui.ros_cam_fi_freq_text.setFontItalic(False)
+        self.ui.ros_cam_fi_freq_text.setFontPointSize(11.0)
 
     def get_current_workspace(self):
         """
