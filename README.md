@@ -3,8 +3,10 @@
 This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
 
 ![Image of CamFIDemoTool_v1.2_offline](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_offline.png)
-![Image of CamFIDemoTool_v1.2_realtime](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_realtime.png)
+*Fig 1. Camera Fault Injector Tool Offline FI Configuration*
 
+![Image of CamFIDemoTool_v1.2_realtime](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_realtime.png)
+*Fig 2. Camera Fault Injector Tool Realtime FI Configuration*
 
 ### Tool Features (in v1.2)
 ---------------------------
@@ -16,6 +18,9 @@ This tool is a simple interface that allows injection of image faults into robot
 - For now, six different fault types can be applied offline to images (with .jpg or .png extension) and real-time stream obtained from RGB camera.
 - You can watch ROS Camera streams.
 - You can specify the rate of real-time fault injecting frequency to be applied.
+
+![Image of CamFIDemoTool_v1.2_realtime_openfi_appliying](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_realtime_openfi_applying.png)
+*Fig 3. Camera Fault Injector Tool Realtime FI Applying Demonstration*
 
 Changelog:
 ----------
