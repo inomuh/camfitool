@@ -32,7 +32,7 @@ Update v1.2 - 10.11.21
 ------------------------
 - Added Real-time FI mode
 - Added RGB Camera FI types (Open, Close, Erosion, Dilation, Gradient and Motion-blur). Now this interface supports two camera types and nine fault types.
-- Added Robot Cam button. This button provides to show active ROS camera screen (User must enter ROS Camera topic name).
+- Added Robot Cam button. This button provides to show active ROS camera (tried ROS Noetic) screen (User must enter ROS Camera topic name).
 - Robot Camera section is active now. User can enter ROS camera topic name for fault injection and enter ROS fault injecting stream frequency value.
 - Added Real-time FI plan saving standart. This plan saving is different than Offline FI plan ones.
 - Some bug fixes, new error pop-up messages and other things.  
