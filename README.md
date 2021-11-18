@@ -49,5 +49,5 @@ Roadmap For Next Updates:
 * [x] +6 Fault Types (Open, Close, Dilation, Erosion, Gradient and Motionblur)
 * [ ] Real-Time TOF Faults integration
 * [ ] CV2 Screen option
-* [ ] ROS Noetic Integration
+* [x] ROS Noetic Integration
 * [ ] More Fault Types
