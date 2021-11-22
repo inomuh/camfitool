@@ -51,6 +51,7 @@ Roadmap For Next Updates:
 * [ ] CV2 Screen option
 * [x] ROS Noetic Integration
 * [ ] More Fault Types
+* [ ] ROS2 Integration
 
 ### Credits
 
