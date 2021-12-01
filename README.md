@@ -35,7 +35,12 @@ Update v1.2 - 10.11.21
 - Added Robot Cam button. This button provides to show active ROS camera (tried ROS Noetic) screen (User must enter ROS Camera topic name).
 - Robot Camera section is active now. User can enter ROS camera topic name for fault injection and enter ROS fault injecting stream frequency value.
 - Added Real-time FI plan saving standart. This plan saving is different than Offline FI plan ones.
-- Some bug fixes, new error pop-up messages and other things.  
+- Some bug fixes, new error pop-up messages and other things.
+
+Update v1.2.1 - 01.12.21
+------------------------
+- Added Error Log system.
+- Fixed randomized fault injection function issue.
 
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
@@ -52,7 +57,7 @@ Roadmap For Next Updates:
 * [x] ROS Noetic Integration
 * [ ] More Fault Types
 * [ ] ROS2 Integration
-* [ ] Error Log System
+* [x] Error Log System
 
 ### Credits
 
