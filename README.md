@@ -1,4 +1,4 @@
-## Camera Fault Injector Tool
+## Camera Fault Injection Tool
 
 This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
 
