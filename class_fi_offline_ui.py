@@ -46,11 +46,10 @@ class OfflineImageFault(object):
         self.fdir_name = fdir_name
         self.img_name = img_name
         self.img_format = img_format
-        self.fault_type = fault_type
         self.camera_type = camera_type
+        self.fault_type = fault_type
         self.fault_rate = fault_rate
         self.bridge = CvBridge()
-
 
     def main(self):
 
@@ -85,6 +84,7 @@ class OfflineImageFault(object):
                 else:
                     print("This fault cannot be found. Try again...")
                     exit()
+
                 im_arr = aug.augment_image(im_arr)
             im = Image.fromarray(im_arr).convert('L')
             im = np.array(im)
@@ -111,6 +111,7 @@ class OfflineImageFault(object):
         kernel = np.ones((fr,fr),np.uint8)
         try:
             im = cv2.imread(self.ndir_name + self.img_name + self.img_format)
+            
             if self.fault_type != "nf":
                 if self.fault_type == "o":
                     im = self.open_fault(im, kernel)

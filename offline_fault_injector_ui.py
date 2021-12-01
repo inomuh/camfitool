@@ -55,7 +55,7 @@ def main(ndir_name, fdir_name, camera_type, fault_type, fault_rate, randomized):
     else:
         length = len(img_name_list)
         randomValue = random.randrange(length)
-        fi_image_name_list = random_fault_applier(img_name_list, ndir_name, fdir_name, img_format, fault_type, fault_rate, randomValue)
+        fi_image_name_list = random_fault_applier(img_name_list, ndir_name, fdir_name, img_format, camera_type, fault_type, fault_rate, randomValue)
         done = "Randomized Injection Sequence Completed!\n----------------------------------\nFault Injected Image Value: "+str(randomValue)+"/"+str(len(img_name_list))
         fi_image_name_list.sort()
     
@@ -79,7 +79,7 @@ def multi_fault_applier(img_name_list, ndir_name, fdir_name, img_format, camera_
 
         tf.main()
 
-def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, fault_type, fault_rate, randomValue):
+def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, camera_type, fault_type, fault_rate, randomValue):
     """
     Rastgele sayıda resim üzerinde hata enjeksiyonu yapmaya yarayan test fonksiyonudur.
     
@@ -88,7 +88,7 @@ def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, fault_t
 
     for j in range(len(img_name_list)):
         image_name= img_name_list[j]
-        tf = ofi(ndir_name, fdir_name, image_name, img_format, "nf", fault_rate)    
+        tf = ofi(ndir_name, fdir_name, image_name, img_format, camera_type, "nf", fault_rate)    
         
         if fault_type == "s" or "g" or "p":    
             tf.tof_image_fault()
@@ -104,7 +104,7 @@ def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, fault_t
         image_name= img_name_list[y]
         
         if x%2 == 0:
-            tf = ofi(ndir_name, fdir_name, image_name, img_format, fault_type, fault_rate)
+            tf = ofi(ndir_name, fdir_name, image_name, img_format, camera_type, fault_type, fault_rate)
             fi_image_name_list.append(image_name)
             tf.tof_image_fault()
             i+=1
