@@ -62,3 +62,7 @@ Roadmap For Next Updates:
 ### Credits
 
 This work is done by [Inovasyon Muhendislik](https://www.inovasyonmuhendislik.com/) under [VALU3S](https://valu3s.eu) project. This project has received funding from the [ECSEL](https://www.ecsel.eu) Joint Undertaking (JU) under grant agreement No 876852. The JU receives support from the European Union’s Horizon 2020 research and innovation programme and Austria, Czech Republic, Germany, Ireland, Italy, Portugal, Spain, Sweden, Turkey.
+
+### License
+
+See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
