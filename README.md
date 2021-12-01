@@ -52,6 +52,7 @@ Roadmap For Next Updates:
 * [x] ROS Noetic Integration
 * [ ] More Fault Types
 * [ ] ROS2 Integration
+* [ ] Error Log System
 
 ### Credits
 
