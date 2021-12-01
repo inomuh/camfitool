@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'interface_v1_2.ui'
-#
-# Created by: PyQt5 UI code generator 5.14.1
-#
-# WARNING! All changes made in this file will be lost!
+"""
+Form implementation generated from reading ui file 'interface_v1_2.ui'
 
+Created by: PyQt5 UI code generator 5.14.1
+
+WARNING! All changes made in this file will be lost!
+"""
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -584,7 +585,7 @@ class Ui_MainWindow(object):
         self.info_label.setText(_translate("MainWindow", "Info"))
         self.fi_plan_label.setText(_translate("MainWindow", "FI Plans"))
         self.progressBar_label.setText(_translate("MainWindow", "FI Applying Progress"))
-        self.version_info_label.setText(_translate("MainWindow", "Version 1.2"))
+        self.version_info_label.setText(_translate("MainWindow", "Version 1.2.1"))
         self.about_button.setText(_translate("MainWindow", "About"))
         self.help_button.setText(_translate("MainWindow", "Help"))
 import icons_rc
