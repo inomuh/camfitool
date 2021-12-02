@@ -58,6 +58,7 @@ Roadmap For Next Updates:
 * [ ] More Fault Types
 * [ ] ROS2 Integration
 * [x] Error Log System
+* [ ] Improved Help Section
 
 ### Credits
 
