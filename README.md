@@ -75,6 +75,17 @@ Roadmap For Next Updates:
 
 This work is done by [Inovasyon Muhendislik](https://www.inovasyonmuhendislik.com/) under [VALU3S](https://valu3s.eu) project. This project has received funding from the [ECSEL](https://www.ecsel.eu) Joint Undertaking (JU) under grant agreement No 876852. The JU receives support from the European Union’s Horizon 2020 research and innovation programme and Austria, Czech Republic, Germany, Ireland, Italy, Portugal, Spain, Sweden, Turkey.
 
+## Cite
+
+If the code or data help you, please cite the following the paper.
+
+    @article{erdogmus2021manipulation,
+      title={Manipulation of Camera Sensor Data via Fault Injection for Anomaly Detection Studies in Verification and Validation Activities For AI},
+      author={Erdogmus, Alim Kerem and Karaca, Mustafa and others},
+      journal={arXiv preprint arXiv:2108.13803},
+      year={2021}
+    }
+
 ### License
 
 See the [LICENSE](LICENSE.md) file for license rights and limitations (Apache-2.0 Licence).
