@@ -66,6 +66,10 @@ Roadmap For Next Updates:
 
 ### Credits
 
+<a href="http://valu3s.eu">
+  <img src="https://valu3s.eu/wp-content/uploads/2020/04/VALU3S_green_transparent-1024x576.png" 
+       alt="valu3s_logo" height="60" >
+</a>
 This work is done by [Inovasyon Muhendislik](https://www.inovasyonmuhendislik.com/) under [VALU3S](https://valu3s.eu) project. This project has received funding from the [ECSEL](https://www.ecsel.eu) Joint Undertaking (JU) under grant agreement No 876852. The JU receives support from the European Union’s Horizon 2020 research and innovation programme and Austria, Czech Republic, Germany, Ireland, Italy, Portugal, Spain, Sweden, Turkey.
 
 ### License
