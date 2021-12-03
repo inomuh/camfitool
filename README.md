@@ -75,4 +75,4 @@ This work is done by [Inovasyon Muhendislik](https://www.inovasyonmuhendislik.co
 
 ### License
 
-See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
+See the [LICENSE](LICENSE.md) file for license rights and limitations (Apache-2.0 Licence).
