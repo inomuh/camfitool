@@ -62,6 +62,7 @@ Roadmap For Next Updates:
 * [ ] ROS2 Integration
 * [x] Error Log System
 * [ ] Improved Help Section
+* [ ] CamFITool ROS Package version
 
 ### Credits
 
