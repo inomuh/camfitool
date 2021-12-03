@@ -67,7 +67,7 @@ Roadmap For Next Updates:
 ### Credits
 
 <a href="http://valu3s.eu">
-  <img src="https://valu3s.eu/wp-content/uploads/2020/04/VALU3S_green_transparent-1024x576.png" 
+  <img align=left img src="https://valu3s.eu/wp-content/uploads/2020/04/VALU3S_green_transparent-1024x576.png" 
        alt="valu3s_logo" height="100" >
 </a>
 
