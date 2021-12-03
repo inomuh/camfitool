@@ -42,6 +42,9 @@ Update v1.2.1 - 01.12.21
 - Added Error Log system.
 - Fixed randomized fault injection function issue.
 
+Update v1.2.2 - 03.12.21
+------------------------
+- CamFITool's software codes are revised (using [Pylint](https://pylint.org/) and [Prospector](https://pypi.org/project/prospector/)).
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
 -------------------------
