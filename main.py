@@ -1,15 +1,14 @@
 """
-CamFITool v1.2.1
+CamFITool v1.2.2
 """
+# -*- coding: utf-8 -*-
 
 import sys
 import os
 import datetime
 import time
 
-from os import listdir
-from os.path import isfile, join
-from typing import Tuple
+from PyQt5 import QtWidgets
 
 import ui_interface as Ui
 #import qt_core as Qt
@@ -17,13 +16,24 @@ import ui_interface as Ui
 from offline_fault_injector_ui import main as ofi
 from realtime_fault_injector_ui import RealtimeFaultInjector as rfi
 
-from PyQt5 import QtWidgets
-
 class MainWindow(QtWidgets.QMainWindow):
     """
     CamFITool Interface MainWindow Class
     """
     def __init__(self):
+        # Değişkenler
+        self.normal_image_file = None
+        self.fi_image_file = None
+        self.fi_freq = None
+        self.fi_plan = None
+        self.fi_type = None
+        self.fault_type = None
+        self.fault_rate = None
+        self.robot_camera_type = None
+        self.camera_type = None
+        self.ros_cam_topic = None
+        self.ros_cam_fi_freq = None
+
         QtWidgets.QMainWindow.__init__(self)
         self.ui_int = Ui.Ui_MainWindow()
         self.ui_int.setupUi(self)
@@ -58,7 +68,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_camera = "right_rokos/color_camera/image_raw"
         self.publish_camera = "right_rokos/color_camera/image_raw_faulty"
         self.ui_int.robot_camera_button.clicked.connect(lambda:
-            self.robot_camera_live(self.robot_camera, self.publish_camera))
+            self.robot_camera_live(self.robot_camera))
 
         # Arayüz açıldığında default normal ve hatalı resim klasörleri ile fi plan
         # listesi otomatik olarak yüklenir.
@@ -68,7 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # ayarlandığı kısım
         self.default_robot_camera_configs()
 
-        self.ui_int.info_text.setText("Welcome to Camera Fault Injector Tool v1.2.1")
+        self.ui_int.info_text.setText("Welcome to Camera Fault Injector Tool v1.2.2")
         self.show()
 
     def starter_folder_indexes(self):
@@ -77,11 +87,11 @@ class MainWindow(QtWidgets.QMainWindow):
         "folder_module" ve "folder_location" değişkenleri olarak tanımlandığı
         fonksiyondur.
         """
-        list = [["image_file", str(self.get_current_workspace())+\
+        folder_list = [["image_file", str(self.get_current_workspace())+\
         '/images/normal_image_folders/'],["fi_file", str(self.get_current_workspace())+\
         '/images/fault_image_folders/']]
 
-        for i,j in list:
+        for i,j in folder_list:
             self.open_default_folders(i,j)
 
         self.update_fi_list_func()
@@ -265,7 +275,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui_int.fault_type_combobox.addItems(['None'])
 
     def apply_fault(self):
-
         """
         Apply Fault butonunun çalıştırıldığı fonksiyondur. Camera Fault
         Configuration kısmında seçilen özelliklere uygun hatanın, Normal
@@ -273,7 +282,6 @@ class MainWindow(QtWidgets.QMainWindow):
         Image Folder kısmında seçilen klasöre bu hatalı resimlerin
         kaydı işlemini başlatır.
         """
-
         #### OFFLINE FAULT INJECTION PART ####
         if self.ui_int.fi_type_combobox.currentText() == "Offline":
             print("Processing..")
@@ -290,17 +298,18 @@ class MainWindow(QtWidgets.QMainWindow):
             # Kaydedilen plan listesinden plan seçilip uygulama eklendiğinde
             # bu satır kaldırılacak.
             plan_from_list = False
-            if plan_from_list == True:
+            if plan_from_list:
                 try:
                     self.ui_int.info_text.clear()
-                    f = open(str(self.get_current_workspace())+'/fi_plans/'+self.fi_plan, "r")
-                    self.ui_int.info_text.setText("FI Plan Applying ...\n-----------------\n"+\
-                        f.read())
-                except Exception as e:
+                    with open(str(self.get_current_workspace())+'/fi_plans/'+\
+                        self.fi_plan, "r", encoding="utf-8") as fi_plan_file:
+                        self.ui_int.info_text.setText("FI Plan Applying ...\n-----------------\n"+\
+                            fi_plan_file.read())
+                except IndexError:
                     self.pop_up_message('Please choose one fault injection plan from "FI Plans"!')
-                    self.error_log(e)
+                    self.error_log(IndexError)
                 else:
-                    if self.ui_int.randomize_check.isChecked() == True:
+                    if self.ui_int.randomize_check.isChecked():
                         print("randomized")
                     else:
                         print("unrandomized")
@@ -336,9 +345,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.pop_up_message("Please choose one Normal and one "+\
                         "Fault image folders from Folder Selection Section on the left side.")
                     self.error_log(IndexError)
-                except Exception as e:
+                except Exception as error_msg:
                     self.pop_up_message("Something wrong! You should look logs file for details.")
-                    self.error_log(e)
+                    self.error_log(error_msg)
 
             print("Completed..")
 
@@ -354,32 +363,34 @@ class MainWindow(QtWidgets.QMainWindow):
             print("Processing..")
             self.ui_int.info_text.setText("Fault injecting to the ROS camera stream...")
             self.robot_camera = self.ui_int.ros_cam_topic_text.toPlainText()
-            self.pop_up_message("This process will be broken this interface.\
-             This will be fixed.")
+            self.pop_up_message("This process will be broken this interface. "+\
+             "This will be fixed.")
 
             # Kaydedilen plan listesinden plan seçilip uygulama eklendiğinde bu satır kaldırılacak.
             plan_from_list = False
 
-            if plan_from_list == True:
+            if plan_from_list:
                 try:
                     self.ui_int.info_text.clear()
-                    f = open(str(self.get_current_workspace())+'/fi_plans/'+self.fi_plan, "r")
-                    self.ui_int.info_text.setText("FI Plan Applying ...\n-----------------\n"+\
-                        f.read())
-                except Exception as e:
+                    with open(str(self.get_current_workspace())+'/fi_plans/'+\
+                        self.fi_plan, "r", encoding="utf-8") as fi_plan_file:
+                        self.ui_int.info_text.setText("FI Plan Applying ...\n-----------------\n"+\
+                            fi_plan_file.read())
+                except IndexError:
                     self.pop_up_message('Please choose one fault injection plan from "FI Plans"!')
-                    self.error_log(e)
+                    self.error_log(IndexError)
             else:
                 self.info_temp()
                 cv2_screen = False # default
 
                 ## Randomized fonksiyonu, realtime modunda CV2 Screen moduna dönüşür.
                 # Kullanıcı isterse hata yayınını CV2 panelinden ayrıca görüntüleyebilir.
+                # Bu kısım henüz test aşamasındadır.
 
-                if self.ui_int.randomize_check.isChecked() == True:
-                    cv2_screen == True
-                else:
-                    cv2_screen == False
+                #if self.ui_int.randomize_check.isChecked():
+                #    cv2_screen is True
+                #else:
+                #    cv2_screen is False
 
                 self.publish_camera = self.robot_camera ## Değişecek.
 
@@ -397,6 +408,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         else:
             self.pop_up_message("Something is wrong! You should check your fault configuration.")
+            self.error_log("Fault configuration error! It may be missing or created "+\
+                "incorrectly. Fill in all the configurations and try again.")
 
     def progress_counter(self, count):
         """
@@ -434,51 +447,57 @@ class MainWindow(QtWidgets.QMainWindow):
             self.fault_type = self.ui_int.fault_type_combobox.currentText()
 
             if self.fi_type == "Offline":
-                f = open("temp.txt", "a")
-                f.write("Robot Camera: ")
-                f.write(self.robot_camera_type)
-                f.write("\nCamera Type: ")
-                f.write(self.camera_type)
-                f.write("\nFault Inj. Type: ")
-                f.write(self.fi_type)
-                f.write("\nFault Type: ")
-                f.write(self.fault_type)
-                f.write("\nFault Rate: ")
-                f.write(self.fault_rate)
-                f.write("%")
+                with open("temp.txt", "a", encoding="utf-8") as temp_file:
+                    temp_file.write("Robot Camera: ")
+                    temp_file.write(self.robot_camera_type)
+                    temp_file.write("\nCamera Type: ")
+                    temp_file.write(self.camera_type)
+                    temp_file.write("\nFault Inj. Type: ")
+                    temp_file.write(self.fi_type)
+                    temp_file.write("\nFault Type: ")
+                    temp_file.write(self.fault_type)
+                    temp_file.write("\nFault Rate: ")
+                    temp_file.write(self.fault_rate)
+                    temp_file.write("%")
             else:
                 self.ros_cam_topic = self.ui_int.ros_cam_topic_text.toPlainText()
                 self.ros_cam_fi_freq = self.ui_int.ros_cam_fi_freq_text.toPlainText()
 
-                f = open("temp.txt", "a")
-                f.write("Robot Camera: ")
-                f.write(self.robot_camera_type)
-                f.write("\nROS Camera Topic: ")
-                f.write(self.ros_cam_topic)
-                f.write("\nROS Camera FI Stream Freq: ")
-                f.write(self.ros_cam_fi_freq)
-                f.write("Hz")
-                f.write("\nCamera Type: ")
-                f.write(self.camera_type)
-                f.write("\nFault Inj. Type: ")
-                f.write(self.fi_type)
-                f.write("\nFault Type: ")
-                f.write(self.fault_type)
-                f.write("\nFault Rate: ")
-                f.write(self.fault_rate)
-                f.write("%")
+                with open("temp.txt", "a", encoding="utf-8") as temp_file:
+                    temp_file.write("Robot Camera: ")
+                    temp_file.write(self.robot_camera_type)
+                    temp_file.write("\nROS Camera Topic: ")
+                    temp_file.write(self.ros_cam_topic)
+                    temp_file.write("\nROS Camera FI Stream Freq: ")
+                    temp_file.write(self.ros_cam_fi_freq)
+                    temp_file.write("Hz")
+                    temp_file.write("\nCamera Type: ")
+                    temp_file.write(self.camera_type)
+                    temp_file.write("\nFault Inj. Type: ")
+                    temp_file.write(self.fi_type)
+                    temp_file.write("\nFault Type: ")
+                    temp_file.write(self.fault_type)
+                    temp_file.write("\nFault Rate: ")
+                    temp_file.write(self.fault_rate)
+                    temp_file.write("%")
 
         except AttributeError:
             self.pop_up_message("Fault Rate Missing!")
             self.error_log(AttributeError)
 
+        except TypeError:
+            self.pop_up_message("Fault Rate Missing!")
+            self.error_log(TypeError)
+
         else:
 
             if self.fi_type == "Offline":
-                if self.ui_int.randomize_check.isChecked() == True:
-                    f.write("\nRandom FI: True")
-                elif self.ui_int.randomize_check.isChecked() == False:
-                    f.write("\nRandom FI: False")
+                if self.ui_int.randomize_check.isChecked():
+                    with open("temp.txt", "a", encoding="utf-8") as temp_file:
+                        temp_file.write("\nRandom FI: True")
+                elif self.ui_int.randomize_check.isChecked() is False:
+                    with open("temp.txt", "a", encoding="utf-8") as temp_file:
+                        temp_file.write("\nRandom FI: False")
                 else:
                     pass
             #else:
@@ -489,10 +508,9 @@ class MainWindow(QtWidgets.QMainWindow):
             #    else:
             #        pass
 
-            f.close()
-            f = open("temp.txt", "r")
-            self.ui_int.info_text.setText(f.read())
-            f.close()
+            temp_file.close()
+            with open("temp.txt", "r", encoding="utf-8") as temp_file:
+                self.ui_int.info_text.setText(temp_file.read())
             os.remove("temp.txt")
 
     def save_fi_plan(self):
@@ -507,22 +525,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
         try:
             # S_File will get the directory path and extension.
-            S__File = Ui.QtWidgets.QFileDialog.getSaveFileName(None,'Save FI Plan',\
+            save_file = Ui.QtWidgets.QFileDialog.getSaveFileName(None,'Save FI Plan',\
                 str(self.get_current_workspace())+'/fi_plans/fi_plan', "Text Files (*.txt)")
 
             # This will let you access the test in your QTextEdit
-            Text = self.ui_int.info_text.toPlainText()
+            save_text = self.ui_int.info_text.toPlainText()
 
             #self.fi_plan(Text)
 
             # This will prevent you from an error if pressed cancel on file dialog.
-            if S__File[0]:
+            if save_file[0]:
                 # Finally this will Save your file to the path selected.
-                with open(S__File[0], 'w') as file:
+                with open(save_file[0], 'w', encoding="utf-8") as temp_file:
                     date = datetime.datetime.now()
-                    file.write("Created: "+str(date.ctime()))
-                    file.write("\n----------------------------------\n")
-                    file.write(Text)
+                    temp_file.write("Created: "+str(date.ctime()))
+                    temp_file.write("\n----------------------------------\n")
+                    temp_file.write(save_text)
 
             self.ui_int.info_text.setText("FI Plan Saved! For Details any Plan, "+\
              "Please Choose One of Them from 'FI Plans' Section and click "+\
@@ -534,50 +552,58 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.update_fi_list_func()
 
-    def pop_up_message(self, msg):
+    @classmethod
+    def pop_up_message(cls, msg):
         """
         Demo Tooldaki hata mesajlarını pop up olarak yayınlayan fonksiyondur.
         """
-        msgBox = QtWidgets.QMessageBox()
-        msgBox.setIcon(QtWidgets.QMessageBox.Warning)
-        msgBox.setText(msg)
-        msgBox.setWindowTitle("Warning")
-        msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        msgBox.exec()
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setIcon(QtWidgets.QMessageBox.Warning)
+        msg_box.setText(msg)
+        msg_box.setWindowTitle("Warning")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg_box.exec()
 
-    def about_section(self):
+    @classmethod
+    def about_section(cls):
         """
         About butonunun tanımlandığı fonksiyondur.
         """
-        msgBox = QtWidgets.QMessageBox()
-        msgBox.setIcon(QtWidgets.QMessageBox.Information)
-        msgBox.setText("Camera Fault Injector Tool, Oct 2021\n"+\
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setIcon(QtWidgets.QMessageBox.Information)
+        msg_box.setText("Camera Fault Injector Tool, Oct 2021\n"+\
             "For More Information, Contact kerem.erdogmus@inovasyonmuhendislik.com.")
-        msgBox.setWindowTitle("About")
-        msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        msgBox.exec()
+        msg_box.setWindowTitle("About")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg_box.exec()
 
-
-    def help_section(self):
+    @classmethod
+    def help_section(cls):
         """
         Help butonunun tanımlandığı fonksiyondur.
         """
-        msgBox = QtWidgets.QMessageBox()
-        msgBox.setIcon(QtWidgets.QMessageBox.Question)
-        msgBox.setInformativeText("Welcome to Camera Fault Injector Tool v1.2\n\n")
-        msgBox.setDetailedText("""Using this tool you can:
-        - You can apply the faults you choose in the configuration menu to the images in the image library you want, and save these wrong images to the folder you want.
-        - You can apply these faults to all images as well as to a random number of images, creating a mixed library of faulty images without touching the remaining images (only offline fault application).
-        - You can save the configuration of the fault you have applied, and view the fault plans you have saved as you wish.
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setIcon(QtWidgets.QMessageBox.Question)
+        msg_box.setInformativeText("Welcome to Camera Fault Injector Tool v1.2.2\n\n")
+        msg_box.setDetailedText("""Using this tool you can:
+        - You can apply the faults you choose in the configuration menu to the images in the
+        image library you want, and save these wrong images to the folder you want.
+        - You can apply these faults to all images as well as to a random number of images,
+        creating a mixed library of faulty images without touching the remaining images
+        (only offline fault application).
+        - You can save the configuration of the fault you have applied, and view the fault
+        plans you have saved as you wish.
         - You can specify the rate of fault to be applied.
-        - For now, three different fault types can be applied offline to images (with .bmp extension) obtained from TOF camera.
-        - For now, six different fault types can be applied offline to images (with .jpg or .png extension) and real-time stream obtained from RGB camera.
+        - For now, three different fault types can be applied offline to images
+        (with .bmp extension) obtained from TOF camera.
+        - For now, six different fault types can be applied offline to images (with .jpg or
+        .png extension) and real-time stream obtained from RGB camera.
         - You can watch ROS Camera streams.
         - You can specify the rate of real-time fault injecting frequency to be applied.
         """)
-        msgBox.setWindowTitle("Help")
-        msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        msgBox.exec()
+        msg_box.setWindowTitle("Help")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        msg_box.exec()
 
 
     def fault_rate_slider(self):
@@ -604,25 +630,29 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             self.ui_int.info_text.clear()
             self.fi_plan = self.ui_int.fi_plan_tree.selectedIndexes()[0].data()
-            f = open(str(self.get_current_workspace())+'/fi_plans/'+self.fi_plan, "r")
-            self.ui_int.info_text.setText(f.read())
-        except Exception as e:
+            with open(str(self.get_current_workspace())+'/fi_plans/'+\
+                self.fi_plan, "r", encoding="utf-8") as fi_plan_file:
+                self.ui_int.info_text.setText(fi_plan_file.read())
+        except IndexError:
             self.pop_up_message('Please choose one fault injection plan from "FI Plans"!')
-            self.error_log(e)
+            self.error_log(IndexError)
 
-    def read_fi_plans(self, Item):
-        self.fi_plan = Item.text()
+    def read_fi_plans(self, plan_text):
+        """
+        FI Planların okunmasını sağlayan fonksiyondur.
+        """
+        self.fi_plan = plan_text.text()
         print(self.fi_plan)
         return self.fi_plan
 
-    def robot_camera_live(self, robot_camera, publish_camera):
+    def robot_camera_live(self, robot_camera): # publish_camera ileride eklenecek.
         """
         Real-time hata enjeksiyonunda, yayın yapan kameranın bir başka terminal
         aracılığıyla açılmasını sağlayan butonun fonksiyonudur.
         """
 
         # Arayüzde ROS Camera seçili olup olmadığı kontrol edilir.
-        rc = self.ui_int.robot_camera_combobox.currentText()
+        ros_cam = self.ui_int.robot_camera_combobox.currentText()
 
         # Kullanıcı ros_cam_topic_text sekmesine herhangi bir topic ismi girmeden
         # tuşa basarsa bu uyarıyı alır.
@@ -632,7 +662,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.pop_up_message('Please enter ROS Camera topic name into the '+\
                 '"ROS Cam. Topic" section!')
         else:
-            if rc == "ROS Camera":
+            if ros_cam == "ROS Camera":
                 # publish_camera da seçilebilir. robot_camera, yayınlanan kameranın
                 # topiğini temsil eder, publish_camera ise istenen bir başka
                 # topic ismidir.
@@ -667,30 +697,29 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui_int.ros_cam_fi_freq_text.setFontItalic(False)
         self.ui_int.ros_cam_fi_freq_text.setFontPointSize(11.0)
 
-    def error_log(self,msg):
+    @classmethod
+    def error_log(cls,msg):
         """
         Arayüz hata mesajı verdiğinde, hata detaylarının kaydının tutulmasını sağlayan
         fonksiyondur.
         """
-        import random
-        
+
         try:
             os.makedirs("logs")
         except OSError:
             pass
-        
-        date = datetime.datetime.now()
-        error_log = open("logs/error_log_"+str(date.hour)+str(date.minute)+str(date.second)+".txt", "w")
-        error_log.write("ERROR: {0}:\n---\n {1}\n".format(str(date.ctime()),str(msg)))
 
+        curr_date = datetime.datetime.now()
+        with open("logs/error_log_"+str(curr_date.hour)+str(curr_date.minute)+\
+            str(curr_date.second)+".txt", "w", encoding="utf-8") as error_log:
+            error_log.write(f"ERROR: {curr_date.ctime()}:\n---\n {msg}\n")
 
-    def get_current_workspace(self):
+    @classmethod
+    def get_current_workspace(cls):
         """
-            Tool'un çalıştığı workspace konumunu veren fonksiyondur.
-
+        Tool'un çalıştığı workspace konumunu veren fonksiyondur.
         """
         file_full_path = os.path.dirname(os.path.realpath(__file__))
-
         return file_full_path
 
 if __name__ == "__main__":

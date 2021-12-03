@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Offline Fault Injection Python Class For Camera FI Demo Tool #
-
-import cv2
+"""
+Offline Fault Injection Python Class For Camera FI Demo Tool
+"""
 import os
+import sys
+import cv2
 from cv_bridge import CvBridge
 import numpy as np
 from PIL import Image
-import numpy as np
 from imgaug import augmenters as iaa
 
 
-class OfflineImageFault(object):
+class OfflineImageFault:
     """
     TOF/RGB Camera Image (Realtime) Fault Library For Camera FI Demo Tool
     ----------------------------------------------------------------
@@ -22,13 +23,13 @@ class OfflineImageFault(object):
         - img_format: Image format (.bmp, .png etc.)
         - camera_type: TOF or RGB
         - fault_type: Choosing fault type
-        - fault_rate: Fault rate (%) 
-        
+        - fault_rate: Fault rate (%)
+
     ### TOF Image Faults:
         - Salt&Pepper -> salt_pepper()
         - Gaussian -> gaussian()
         - Poisson -> poisson()
-    
+
     ### RGB Image Faults:
         - Open -> open_fault()
         - Close -> close_fault()
@@ -40,7 +41,8 @@ class OfflineImageFault(object):
 
     ###### Created by AKE - 04.11.21
     """
-    def __init__(self, ndir_name, fdir_name, img_name, img_format, camera_type, fault_type, fault_rate):
+    def __init__(self, ndir_name, fdir_name, img_name, img_format,\
+         camera_type, fault_type, fault_rate):
 
         self.ndir_name = ndir_name
         self.fdir_name = fdir_name
@@ -52,7 +54,7 @@ class OfflineImageFault(object):
         self.bridge = CvBridge()
 
     def main(self):
-
+        """Main Function"""
         if self.camera_type == "TOF":
             self.tof_image_fault()
         elif self.camera_type == "RGB":
@@ -60,40 +62,38 @@ class OfflineImageFault(object):
         else:
             print("Error")
 
-    def tof_image_fault(self):   
+    def tof_image_fault(self):
         """
         TOF Image Faults:
         - Salt&Pepper -> salt_pepper()
         - Gaussian -> gaussian()
         - Poisson -> poisson()
-    
-        """ 
-        #print(self.ndir_name, self.fdir_name, self.img_name, self.img_format, self.fault_type, self.fault_rate)        
+        """
 
         try:
-            im = Image.open(self.ndir_name + self.img_name + self.img_format)
-            im_arr = np.asarray(im)
+            image_file = Image.open(self.ndir_name + self.img_name + self.img_format)
+            im_arr = np.asarray(image_file)
 
             if self.fault_type != "nf":
                 if self.fault_type == "s":
-                    aug = self.salt_pepper(self.fault_rate)
+                    aug_img = self.salt_pepper(self.fault_rate)
                 elif self.fault_type == "g":
-                    aug = self.gaussian(self.fault_rate)
+                    aug_img = self.gaussian(self.fault_rate)
                 elif self.fault_type == "p":
-                    aug = self.poisson(self.fault_rate)
+                    aug_img = self.poisson(self.fault_rate)
                 else:
                     print("This fault cannot be found. Try again...")
-                    exit()
+                    sys.exit()
 
-                im_arr = aug.augment_image(im_arr)
-            im = Image.fromarray(im_arr).convert('L')
-            im = np.array(im)
+                im_arr = aug_img.augment_image(im_arr)
+            image_file = Image.fromarray(im_arr).convert('L')
+            image_file = np.array(image_file)
             image_name = str(self.img_name + self.img_format)
-            cv2.imwrite(os.path.join(self.fdir_name, image_name), im) # saving faulty tof image
-            
+            # saving faulty tof image
+            cv2.imwrite(os.path.join(self.fdir_name, image_name), image_file)
 
-        except Exception as err:
-            print(err)
+        except Exception as error_msg:
+            print(error_msg)
 
     def rgb_image_fault(self):
         """
@@ -105,82 +105,98 @@ class OfflineImageFault(object):
             - Gradient -> gradient()
             - Motion-blur -> motion_blur()
             - Partialloss -> partialloss()
-        
         """
-        fr = int(self.fault_rate * 20) # Normalde fault rate yüzdelik olarak geldiğinden (TOF için düzenlenmişti), o değerin 0-20 aralığına getirilmesi sağlandı.  
-        kernel = np.ones((fr,fr),np.uint8)
+        # Normalde fault rate yüzdelik olarak geldiğinden
+        # (TOF için düzenlenmişti), o değerin 0-20 aralığına getirilmesi sağlandı.
+        fi_rate = int(self.fault_rate * 20)
+        kernel = np.ones((fi_rate,fi_rate),np.uint8)
         try:
-            im = cv2.imread(self.ndir_name + self.img_name + self.img_format)
-            
+            image_file = cv2.imread(self.ndir_name + self.img_name + self.img_format)
+
             if self.fault_type != "nf":
                 if self.fault_type == "o":
-                    im = self.open_fault(im, kernel)
+                    image_file = self.open_fault(image_file, kernel)
                 elif self.fault_type == "c":
-                    im = self.close_fault(im, kernel)
+                    image_file = self.close_fault(image_file, kernel)
                 elif self.fault_type == "e":
-                    im = self.erosion(im, kernel)
+                    image_file = self.erosion(image_file, kernel)
                 elif self.fault_type == "d":
-                    im = self.dilation(im, kernel)
+                    image_file = self.dilation(image_file, kernel)
                 elif self.fault_type == "gr":
-                    im = self.gradient(im, kernel)
+                    image_file = self.gradient(image_file, kernel)
                 elif self.fault_type == "m":
-                    im = self.motion_blur(im, fr)
+                    image_file = self.motion_blur(image_file, fi_rate)
                 elif self.fault_type == "par":
-                    im = self.partialloss(im, kernel)        
+                    image_file = self.partialloss(image_file, kernel)
                 else:
                     print("This fault cannot be found. Try again...")
-                    exit()
+                    sys.exit()
 
             img_format = ".png" # RGB tipinde kaydetmek için. Değiştirilebilir.
             image_name = str(self.img_name + img_format)
-            cv2.imwrite(os.path.join(self.fdir_name, image_name), im) # saving faulty tof image
-            
+            # saving faulty tof image
+            cv2.imwrite(os.path.join(self.fdir_name, image_name), image_file)
 
-        except Exception as err:
-            print(err)
-
+        except Exception as error_msg:
+            print(error_msg)
 
     ### TOF Faults ###
-    def salt_pepper(self, fr):
-        # salt and pepper noise
-        aug = iaa.SaltAndPepper(p = fr)
-        return aug
-            
-    def gaussian(self, fr):
-        # gausian noise
-        aug = iaa.AdditiveGaussianNoise(loc=0, scale=fr*255)
-        return aug
+    @classmethod
+    def salt_pepper(cls, fi_rate):
+        """Salt&Pepper Gürültüsü"""
+        aug_img = iaa.SaltAndPepper(p = fi_rate)
+        return aug_img
 
-    def laplacian(self, fr): # Will Be Added.
-        # laplacian noise
-        aug = iaa.AdditiveLaplaceNoise(loc=0, scale=fr*255)
-        return aug
+    @classmethod
+    def gaussian(cls, fi_rate):
+        """Gaussian Gürültüsü"""
+        aug_img = iaa.AdditiveGaussianNoise(loc=0, scale=fi_rate*255)
+        return aug_img
 
-    def poisson(self, fr):
-        # poisson noise
-        fr = float(fr*100)
-        aug = iaa.AdditivePoissonNoise(lam=fr, per_channel=True)
-        return aug
+    @classmethod
+    def laplacian(cls, fi_rate): # Will Be Added.
+        """Laplacian Gürültüsü (Under-development)"""
+        aug_img = iaa.AdditiveLaplaceNoise(loc=0, scale=fi_rate*255)
+        return aug_img
+
+    @classmethod
+    def poisson(cls, fi_rate):
+        """Poisson Gürültüsü"""
+        fi_rate = float(fi_rate*100)
+        aug_img = iaa.AdditivePoissonNoise(lam=fi_rate, per_channel=True)
+        return aug_img
 
     ### RGB Faults ###
-    def open_fault(self, img, k):
-        return cv2.morphologyEx(img, cv2.MORPH_OPEN, k)
+    @classmethod
+    def open_fault(cls, img_msg, k):
+        """Open FI Method"""
+        return cv2.morphologyEx(img_msg, cv2.MORPH_OPEN, k)
 
-    def close_fault(self, img, k):
-        return cv2.morphologyEx(img, cv2.MORPH_CLOSE, k)
-        
-    def dilation(self, img, k):
-        return cv2.dilate(img,k, iterations = 5)
-    
-    def erosion(self, img, k):
-        return cv2.erode(img,k, iterations = 5) 
+    @classmethod
+    def close_fault(cls, img_msg, k):
+        """Close FI Method"""
+        return cv2.morphologyEx(img_msg, cv2.MORPH_CLOSE, k)
 
-    def gradient(self, img, k):
-        return cv2.morphologyEx(img, cv2.MORPH_GRADIENT, k)
+    @classmethod
+    def dilation(cls, img_msg, k):
+        """Dilation FI Method"""
+        return cv2.dilate(img_msg,k, iterations = 5)
 
-    def partialloss(self, img):
-        ###Eklenecek.
-        pass
+    @classmethod
+    def erosion(cls, img_msg, k):
+        """Erosion FI Method"""
+        return cv2.erode(img_msg,k, iterations = 5)
 
-    def motion_blur(self, img, fr):
-        return cv2.blur(img,(fr, fr))
+    @classmethod
+    def gradient(cls, img_msg, k):
+        """Gradient FI Method"""
+        return cv2.morphologyEx(img_msg, cv2.MORPH_GRADIENT, k)
+
+    @classmethod
+    def partialloss(cls, img_msg, kernel):
+        """Partialloss FI Method (Under-development)"""
+
+    @classmethod
+    def motion_blur(cls, img_msg, fi_rate):
+        """Motionblur FI Method"""
+        return cv2.blur(img_msg,(fi_rate, fi_rate))

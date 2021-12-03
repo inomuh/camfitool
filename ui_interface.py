@@ -585,7 +585,7 @@ class Ui_MainWindow(object):
         self.info_label.setText(_translate("MainWindow", "Info"))
         self.fi_plan_label.setText(_translate("MainWindow", "FI Plans"))
         self.progressBar_label.setText(_translate("MainWindow", "FI Applying Progress"))
-        self.version_info_label.setText(_translate("MainWindow", "Version 1.2.1"))
+        self.version_info_label.setText(_translate("MainWindow", "Version 1.2.2"))
         self.about_button.setText(_translate("MainWindow", "About"))
         self.help_button.setText(_translate("MainWindow", "Help"))
 import icons_rc

@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Real-time Fault Injector For Camera FI Demo Tool #
+"""
+Real-time Fault Injector For Camera FI Demo Tool
+"""
 
-import os
 from os import listdir
 from os.path import isfile, join
-from class_fi_realtime_ui import RealtimeImageFault as fireal
 import rospy
-from sensor_msgs.msg import Image
 import cv2
 import numpy as np
 from cv_bridge import CvBridge
+from sensor_msgs.msg import Image
+from class_fi_realtime_ui import RealtimeImageFault as fireal
 
-
-
-class RealtimeFaultInjector(object):
+class RealtimeFaultInjector:
     """
     TOF/RGB Camera Image (Realtime) Fault Library For Camera FI Demo Tool
     ----------------------------------------------------------------
@@ -24,7 +23,7 @@ class RealtimeFaultInjector(object):
         - camera_type = Camera Type info
         - fault_type: Choosing fault type
         - fault_rate: Fault rate (%)
-        - fi_pub_rate: ROS Publisher rate (Hz) 
+        - fi_pub_rate: ROS Publisher rate (Hz)
         - cv2_screen: CV2 screen check (True/False)
 
     ### TOF Image Faults (Under-development):
@@ -43,10 +42,11 @@ class RealtimeFaultInjector(object):
 
     ###### Created by AKE - 04.11.21
     """
- 
-    def __init__(self,robot_camera, publish_camera, camera_type, fault_type, fault_rate, fi_pub_rate, cv2_screen=False):
-        
-        
+
+    def __init__(self,robot_camera, publish_camera, camera_type, fault_type,\
+         fault_rate, fi_pub_rate, cv2_screen=False):
+
+        """Main Function"""
         self.bridge = CvBridge()
         self.kernel = self.fault_rate_calc(fault_rate)
         self.camera_type = camera_type
@@ -56,25 +56,24 @@ class RealtimeFaultInjector(object):
         self.fault_rate = fault_rate
         self.cv2_screen = cv2_screen
         self.fi_pub_rate = fi_pub_rate
-        
-        
+
         rospy.init_node("camera_fault_injection_demo_tool_node",anonymous=True)
         # Robot kamera bilgisi arayüzden gelecek.
         rospy.Subscriber(robot_camera, Image, self.camera_callback)
         #rospy.Subscriber("right_rokos/color_camera/image_raw", Image, self.camera_callback)
         rospy.spin()
-        
-    def camera_callback(self, msg):
 
+    def camera_callback(self, msg):
+        """ROS kamera düğümündeki yayını takip eder."""
         if self.camera_type == "TOF":
             img = self.bridge.imgmsg_to_cv2(msg, '32FC1') #For color cam, use "bgr8"
-            im_arr = np.asarray(img)
-            
+            #im_arr = np.asarray(img)
+
         elif self.camera_type == "RGB":
             img = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
 
         fir = fireal(img, self.kernel, self.fault_type, self.fault_rate)
-        
+
         if self.fault_type == "Gaussian":
             #img = fir.gaussian()
             print("This fault type will be added.")
@@ -97,23 +96,23 @@ class RealtimeFaultInjector(object):
         elif self.fault_type == "Moiton-blur":
             img = fir.motion_blur()
         elif self.fault_type == "Partialloss":
-            img = fir.partialloss()
+            #img = fir.partialloss()
+            print("Under-development")
         else:
-            pass    
-        
-        if self.cv2_screen == True:
+            pass
+
+        if self.cv2_screen:
             cv2.imshow("CV2 Screen",img)
             cv2.waitKey(1)
             print("test")
             ### cv2_screen değişkeni işaretliyse basılan hatayı cv2 ekranında gösterir.
-            #os.system("gnome-terminal -x python cv2_show.py") 
-            
+            #os.system("gnome-terminal -x python cv2_show.py")
+
         else:
             self.camera_fault_publisher(img, self.robot_camera, self.camera_type, self.fi_pub_rate)
-        
 
     def camera_fault_publisher(self, msg, robot_camera, camera_type, rate):
-
+        """Hata enjekte edilmiş yayını, ROS düğümüne verir."""
         pub_camera = rospy.Publisher(robot_camera, Image, queue_size=10)
         #pub_camera = rospy.Publisher("right_rokos/color_camera/image_raw", Image, queue_size=10)
         if camera_type == "TOF":
@@ -122,30 +121,34 @@ class RealtimeFaultInjector(object):
             img = self.bridge.cv2_to_imgmsg(msg, 'bgr8')
 
         pub_camera.publish(img)
-        r = rospy.Rate(rate)
-        r.sleep()
+        rate = rospy.Rate(rate)
+        rate.sleep()
 
-    def read_image_list(self, file_path):
+    @classmethod
+    def read_image_list(cls, file_path):
         """
         Resim klasöründeki resimlerin isimlerini bir listeye kaydeder.
         """
         onlyfiles = [f for f in listdir(file_path) if isfile(join(file_path, f))]
         image_list = [i.split(".",1)[0] for i in onlyfiles]
         return image_list
-    
-    def fault_rate_calc(self, fr):
 
-        fr = int(fr)
-        kernel = np.ones((fr,fr),np.uint8)
+    @classmethod
+    def fault_rate_calc(cls, fi_rate):
+        """
+        Hata oranının hesaplanıp kernel olarak dönüştürüldüğü fonksiyondur
+        """
+        fi_rate = int(fi_rate)
+        kernel = np.ones((fi_rate,fi_rate),np.uint8)
 
         return kernel
 
 #if __name__ == "__main__":
-#    
 #    cv2_screen = False
 #    camera_type = "RGB"
 #    robot_camera = "right_rokos/color_camera/image_raw"
 #    publish_camera = "right_rokos/color_camera/image_raw_faulty"
 #    fault_type = "Erosion"
 #    fault_rate = 5
-#    RealtimeFaultInjector(robot_camera, publish_camera, camera_type, fault_type, fault_rate, cv2_screen)
+#    RealtimeFaultInjector(robot_camera, publish_camera, camera_type,\
+#  fault_type, fault_rate, cv2_screen)
