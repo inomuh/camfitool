@@ -584,7 +584,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         msg_box = QtWidgets.QMessageBox()
         msg_box.setIcon(QtWidgets.QMessageBox.Question)
-        msg_box.setInformativeText("Welcome to Camera Fault Injector Tool v1.2.2\n\n")
+        msg_box.setInformativeText("Welcome to Camera Fault Injection Tool v1.2.2\n\n")
         msg_box.setDetailedText("""Using this tool you can:
         - You can apply the faults you choose in the configuration menu to the images in the
         image library you want, and save these wrong images to the folder you want.
