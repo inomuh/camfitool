@@ -131,7 +131,11 @@ def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, camera_
     return fi_image_name_list
 
 def img_format_finder(ndir_name):
-
+    """
+    Bu fonksiyon, normal resim veritabanından alınan resimlerin hangi
+    formatta olduklarını okur, hatalı resimler de aynı formatta
+    çıkarılır.
+    """
     one_image = os.listdir(ndir_name)[0]
     img_format = "." + one_image.split(".",2)[1]
 
