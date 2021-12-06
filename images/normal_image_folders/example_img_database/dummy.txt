@@ -1,0 +1,1 @@
+You can put your normal image database like "normal_image_database" folder.
