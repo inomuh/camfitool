@@ -47,6 +47,12 @@ Update v1.2.1 - 01.12.21
 Update v1.2.2 - 03.12.21
 ------------------------
 - CamFITool's software codes are revised (using [Pylint](https://pylint.org/) and [Prospector](https://pypi.org/project/prospector/)).
+
+Update v1.2.3 - 06.12.21
+------------------------
+- Fixed "Known Issues #4: Offline RGB Randomized FI crash" bug
+- Fixed "Known Issues #3: Image Formats"
+
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
 -------------------------
