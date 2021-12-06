@@ -33,6 +33,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.camera_type = None
         self.ros_cam_topic = None
         self.ros_cam_fi_freq = None
+        self.robot_camera = None
+        self.publish_camera = "camfitool_cam/faulty_image_raw"
 
         QtWidgets.QMainWindow.__init__(self)
         self.ui_int = Ui.Ui_MainWindow()
@@ -65,8 +67,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Robot Camera butonuna basıldığında, robot_camera değişkenindeki ros düğümü
         # izlemeye alınır.
-        self.robot_camera = "right_rokos/color_camera/image_raw"
-        self.publish_camera = "right_rokos/color_camera/image_raw_faulty"
         self.ui_int.robot_camera_button.clicked.connect(lambda:
             self.robot_camera_live(self.robot_camera))
 
