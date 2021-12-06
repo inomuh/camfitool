@@ -52,7 +52,7 @@ Update v1.2.3 - 06.12.21
 ------------------------
 - Fixed "Known Issues #4: Offline RGB Randomized FI crash" bug
 - Fixed "Known Issues #3: Image Formats"
-- New image databases added (These images taken from [COIL Database](https://www1.cs.columbia.edu/CAVE/software/softlib/coil-100.php)
+- New image databases added (These images taken from [COIL Database](https://www1.cs.columbia.edu/CAVE/software/softlib/coil-100.php))
 
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
