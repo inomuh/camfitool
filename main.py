@@ -33,8 +33,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.camera_type = None
         self.ros_cam_topic = None
         self.ros_cam_fi_freq = None
-        self.robot_camera = None
-        self.publish_camera = "camfitool_cam/faulty_image_raw"
 
         QtWidgets.QMainWindow.__init__(self)
         self.ui_int = Ui.Ui_MainWindow()
@@ -42,7 +40,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
         self.setWindowIcon(Ui.QtGui.QIcon(":icons/imfit_logo.png"))
-        self.setWindowTitle("Camera Fault Injection Tool")
+        self.setWindowTitle("Camera Fault Injector Tool")
 
         QtWidgets.QSizeGrip(self.ui_int.size_grip)
 
@@ -67,6 +65,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Robot Camera butonuna basıldığında, robot_camera değişkenindeki ros düğümü
         # izlemeye alınır.
+        self.robot_camera = "right_rokos/color_camera/image_raw"
+        self.publish_camera = "right_rokos/color_camera/image_raw_faulty"
         self.ui_int.robot_camera_button.clicked.connect(lambda:
             self.robot_camera_live(self.robot_camera))
 
@@ -78,7 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # ayarlandığı kısım
         self.default_robot_camera_configs()
 
-        self.ui_int.info_text.setText("Welcome to Camera Fault Injector Tool v1.2.2")
+        self.ui_int.info_text.setText("Welcome to Camera Fault Injector Tool v1.2.3")
         self.show()
 
     def starter_folder_indexes(self):
@@ -584,7 +584,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         msg_box = QtWidgets.QMessageBox()
         msg_box.setIcon(QtWidgets.QMessageBox.Question)
-        msg_box.setInformativeText("Welcome to Camera Fault Injection Tool v1.2.2\n\n")
+        msg_box.setInformativeText("Welcome to Camera Fault Injector Tool v1.2.2\n\n")
         msg_box.setDetailedText("""Using this tool you can:
         - You can apply the faults you choose in the configuration menu to the images in the
         image library you want, and save these wrong images to the folder you want.

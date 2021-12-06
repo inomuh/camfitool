@@ -132,8 +132,8 @@ class OfflineImageFault:
                     print("This fault cannot be found. Try again...")
                     sys.exit()
 
-            img_format = ".png" # RGB tipinde kaydetmek için. Değiştirilebilir.
-            image_name = str(self.img_name + img_format)
+            #img_format = ".png" # RGB tipinde kaydetmek için. Değiştirilebilir.
+            image_name = str(self.img_name + self.img_format)
             # saving faulty tof image
             cv2.imwrite(os.path.join(self.fdir_name, image_name), image_file)
 

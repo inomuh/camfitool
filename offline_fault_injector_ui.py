@@ -3,7 +3,7 @@
 """
 TOF Fault Injector For Camera FI Demo Tool
 """
-
+import os
 from os import listdir
 from os.path import isfile, join
 import random
@@ -20,7 +20,7 @@ def main(ndir_name, fdir_name, camera_type, fault_type, fault_rate, randomized):
     # Şu an elimizdeki kütüphane .bmp uzantılı, ancak rgb resimler söz konusu
     # olursa img_format değişkeni bu doğrultuda düzenlenecek.
 
-    img_format = ".bmp"
+    img_format= str(img_format_finder(ndir_name))
     img_name_list = read_image_list(ndir_name)
     fault_rate = int(fault_rate)/100
     random_value = 0
@@ -116,7 +116,12 @@ def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, camera_
             apply_fault = ofi(ndir_name, fdir_name, image_name, img_format, camera_type,\
                  fault_type, fault_rate)
             fi_image_name_list.append(image_name)
-            apply_fault.tof_image_fault()
+
+            if fault_type in {"s", "g", "p"}:
+                apply_fault.tof_image_fault()
+            else:
+                apply_fault.rgb_image_fault()
+
             i_val+=1
         y_val+=1
 
@@ -124,3 +129,10 @@ def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, camera_
             y_val = 0
 
     return fi_image_name_list
+
+def img_format_finder(ndir_name):
+
+    one_image = os.listdir(ndir_name)[0]
+    img_format = "." + one_image.split(".",2)[1]
+
+    return img_format
