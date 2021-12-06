@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>	
+
+<node name="camfitool_main_screen" pkg="camfitool" type="main.py"/>
+
+</launch>
