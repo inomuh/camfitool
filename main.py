@@ -42,7 +42,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
         self.setWindowIcon(Ui.QtGui.QIcon(":icons/imfit_logo.png"))
-        self.setWindowTitle("Camera Fault Injector Tool")
+        self.setWindowTitle("Camera Fault Injection Tool")
 
         QtWidgets.QSizeGrip(self.ui_int.size_grip)
 
