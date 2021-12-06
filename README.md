@@ -1,4 +1,5 @@
-# Camera Fault Injection Tool
+# Camera Fault Injection Tool (ROS Edition)
+### Current Version: v1.2.3
 
 ![](https://img.shields.io/github/repo-size/inomuh/Camera-Fault-Injection-Tool) ![](https://img.shields.io/github/last-commit/inomuh/Camera-Fault-Injection-Tool) ![Apache-2.0 License](https://img.shields.io/github/license/inomuh/Camera-Fault-Injection-Tool?color=blue) 
 
@@ -23,6 +24,13 @@ This tool is a simple interface that allows injection of image faults into robot
 
 ![Image of CamFIDemoTool_v1.2_realtime_openfi_appliying](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_realtime_openfi_applying.png)
 *Fig 3. Camera Fault Injector Tool Realtime FI Applying Demonstration*
+
+### Usage
+----------
+This tool is compatible to ROS Noetic (not tested in ROS Melodic).
+For launching CamFITool:
+    
+    roslaunch camfitool start_camfitool.launch
 
 Changelog:
 ----------
