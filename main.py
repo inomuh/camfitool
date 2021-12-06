@@ -722,6 +722,7 @@ class MainWindow(QtWidgets.QMainWindow):
         file_full_path = os.path.dirname(os.path.realpath(__file__))
         return file_full_path
 
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
