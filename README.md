@@ -29,6 +29,8 @@ For trying ROS package version of CamFITool:
 - You can monitor the ROS Camera node.
 - You can specify the rate of real-time fault injecting frequency to be applied.
 
+---
+
 ![Image of CamFIDemoTool_v1.2_realtime_openfi_appliying](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_realtime_openfi_applying.png)
 *Fig 3. Camera Fault Injector Tool Realtime FI Applying Demonstration*
 
