@@ -4,6 +4,8 @@
 
 This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
 
+ROS Wiki page: http://wiki.ros.org/camfitool
+
 ![Image of CamFIDemoTool_v1.2_offline](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_offline.png)
 *Fig 1. Camera Fault Injector Tool Offline FI Configuration*
 
