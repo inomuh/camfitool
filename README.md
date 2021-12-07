@@ -74,6 +74,8 @@ Roadmap For Next Updates:
 * [x] RGB Camera FI
 * [x] Real-Time Type Fault Injection (only RGB cameras)
 * [x] +6 Fault Types (Open, Close, Dilation, Erosion, Gradient and Motionblur)
+* [x] Github Wiki page
+* [x] ROS Wiki Page
 * [ ] Real-Time TOF Faults integration
 * [ ] CV2 Screen option
 * [x] ROS Noetic Integration
