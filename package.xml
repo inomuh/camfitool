@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>camfitool</name>
-  <version>1.2.2</version>
+  <version>1.2.3</version>
   <description>The CamFITool ROS Package</description>
 
   <maintainer email="bilgi@inovasyonmuhendislik.com">İnovasyon Muhendislik</maintainer>
