@@ -1,7 +1,18 @@
-"""
-CamFITool v1.2.2
-"""
 # -*- coding: utf-8 -*-
+"""
+Camera Fault Injection Tool (CamFITool)
+-----------------------------------------------
+This tool is a simple interface that allows injection of image faults
+into robot cameras. Thanks to this interface, you can create new image
+libraries by injecting the fault types you have determined, both real-time
+to TOF and RGB type ROS cameras, and to the image libraries previously
+recorded by these cameras.
+"""
+
+__author__ = "Alim Kerem Erdogmus"
+__version__ = "v1.2.3"
+__email__ = "kerem.erdogmus@inovasyonmuhendislik.com"
+__status__ = "developing"
 
 import sys
 import os
