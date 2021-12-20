@@ -79,6 +79,7 @@ Roadmap For Next Updates:
 * [x] +6 Fault Types (Open, Close, Dilation, Erosion, Gradient and Motionblur)
 * [x] [Github Wiki page](https://github.com/inomuh/camfitool/wiki)
 * [x] [ROS Wiki page](http://wiki.ros.org/camfitool/)
+* [x] [CamFITool Pypi package](https://pypi.org/project/camfitool/) (This is Alpha version)
 * [ ] Real-Time TOF Faults integration
 * [ ] CV2 Screen option
 * [x] ROS Noetic Integration
