@@ -18,6 +18,7 @@ import sys
 import os
 import datetime
 import time
+import subprocess
 
 from PyQt5 import QtWidgets
 
@@ -678,7 +679,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 # topiğini temsil eder, publish_camera ise istenen bir başka
                 # topic ismidir.
                 robot_camera = self.ui_int.ros_cam_topic_text.toPlainText()
-                os.system("gnome-terminal -x rosrun image_view image_view image:="+robot_camera)
+                #os.system("gnome-terminal -x rosrun image_view image_view image:="+robot_camera)
+                subprocess.call("gnome-terminal -x rosrun image_view image_view image:="+robot_camera)
             else:
                 self.pop_up_message('ROS Camera connection failed.')
 
