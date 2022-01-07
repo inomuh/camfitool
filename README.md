@@ -1,5 +1,6 @@
 # Camera Fault Injection Tool
 ![Documentation](https://img.shields.io/badge/Docs-http%3A%2F%2Fwiki.ros.org%2Fcamfitool%2F-brightgreen)
+[![CodeFactor](https://www.codefactor.io/repository/github/akerdogmus/camfitool/badge)](https://www.codefactor.io/repository/github/akerdogmus/camfitool)
 
 ![current_version](https://img.shields.io/github/v/release/inomuh/camfitool?color=green) ![last_commit](https://img.shields.io/github/last-commit/inomuh/Camera-Fault-Injection-Tool?color=green) ![tool version](https://img.shields.io/badge/version-standart-blue) ![repo_size](https://img.shields.io/github/repo-size/inomuh/Camera-Fault-Injection-Tool) ![Apache-2.0 License](https://img.shields.io/github/license/inomuh/Camera-Fault-Injection-Tool?color=blue) ![lang](https://img.shields.io/github/languages/top/inomuh/camfitool)
 
