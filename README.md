@@ -20,13 +20,15 @@ For trying ROS package version of CamFITool:
 ![Image of CamFIDemoTool_v1.2_realtime](https://github.com/inomuh/Camera-Fault-Injector-Tool/blob/v1.2/camfitool_v1.2_realtime.png)
 *Fig 2. Camera Fault Injector Tool Realtime FI Configuration*
 
-### Tool Features (in v1.2)
+### Tool Features (in v1.3)
 ---------------------------
 - You can apply the faults you choose in the configuration menu to the images in the image library you want, and save these wrong images to the folder you want. So you can create your faulty image library.
 - You can apply these faults to all images as well as to a random number of images, creating a mixed library of faulty images without touching the remaining images (only offline fault application).
 - You can save the configuration of the fault you have applied, and view the fault plans you have saved as you wish.
 - You can specify the rate of fault to be applied.
 - Three different fault types can be applied offline to images (with .bmp extension) obtained from TOF camera and six different fault types can be applied offline to images (with .png/.jpg extension) obtained from RGB camera.
+- **NEW** It is now possible to select what percentage of images in the normal image database to apply an error.
+- **NEW** It is possible to inject two different error types into a normal image database at desired rates (it is not possible to apply more than two errors to the same database yet).
 - For now, six different fault types can be applied real-time stream obtained from RGB camera (TOF Realtime FI will be added).
 - You can use the ROS Noetic version (noetic-version) or the standard version (current v1.2.3).
 - You can monitor the ROS Camera node.
@@ -66,6 +68,10 @@ Update v1.2.3 - 06.12.21
 - Fixed "Known Issues #4: Offline RGB Randomized FI crash" bug
 - Fixed "Known Issues #3: Image Formats"
 - New image databases added (These images taken from [COIL Database](https://www1.cs.columbia.edu/CAVE/software/softlib/coil-100.php))
+
+Update v1.3 - Developing
+------------------------
+- CamFITool main codes are revised.
 
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
