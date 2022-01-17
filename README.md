@@ -71,9 +71,13 @@ Update v1.2.3 - 06.12.21
 - Fixed "Known Issues #3: Image Formats"
 - New image databases added (These images taken from [COIL Database](https://www1.cs.columbia.edu/CAVE/software/softlib/coil-100.php))
 
-Update v1.3 - Developing
+Update v1.3 - 17.01.22
 ------------------------
 - CamFITool main codes are revised.
+- Two different fault types can now be injected into the same output folder (Max two fault type).
+- An fault can now be injected into a certain rate of an image database (Fault Implementation Rate).
+- Reset button added (You can reset the interface with this).
+- Some bug fixes.
 
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
@@ -88,6 +92,8 @@ Roadmap For Next Updates:
 * [x] [Github Wiki page](https://github.com/inomuh/camfitool/wiki)
 * [x] [ROS Wiki page](http://wiki.ros.org/camfitool/)
 * [x] [CamFITool Pypi package](https://pypi.org/project/camfitool/) (This is Alpha version)
+* [x] Reset Button
+* [x] Mixed Fault Injection
 * [ ] Real-Time TOF Faults integration
 * [ ] CV2 Screen option
 * [x] ROS Noetic Integration
