@@ -77,6 +77,7 @@ Update v1.3 - 17.01.22
 - Two different fault types can now be injected into the same output folder (Max two fault type).
 - An fault can now be injected into a certain rate of an image database (Fault Implementation Rate).
 - Reset button added (You can reset the interface with this).
+- Added a log system to keep the names of the images that were injected and not.
 - Some bug fixes.
 
 ---------------------------------------------------------------------------------
