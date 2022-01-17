@@ -3,26 +3,31 @@
 """
 TOF Fault Injector For Camera FI Demo Tool
 """
+
 import os
 from os import listdir
 from os.path import isfile, join
 import random
 from class_fi_offline_ui import OfflineImageFault as ofi
+#from class_list_creator import ListCreator as img_list
 
-def main(ndir_name, fdir_name, camera_type, fault_type, fault_rate, randomized):
+def main(ndir_name, fdir_name, camera_type, fault_type, fault_rate, randomized, fimp_rate, last_fi_name_list):
     """
-    Offline Camera Fault Injector UI modülü, Camera Fault Injector Demo Tool'dan
-    gerekli değişkenleri alır, class_fi_offline_ui class'ına uygun bir şekilde gönderir.
-    Offline yönteminde (hazır bir resim klasörüne hata basılıp, bir başka klasöre kayıt
-    yapılan yöntem) hata basmaya yarayan bu yöntem TOF ve RGB resim türleri için belirlenmiş
-    uygun hata tiplerini derler.
+    Offline Camera Fault Injector UI module takes required variables from
+    CamFITool and sends them to class_fi_offline_ui accordingly. This method,
+    which is used to print an fault in the offline method (the method where
+    a fault is printed in a ready image folder and saved in another folder),
+    compiles the appropriate fault types determined for TOF and RGB image types.
     """
-    # Şu an elimizdeki kütüphane .bmp uzantılı, ancak rgb resimler söz konusu
-    # olursa img_format değişkeni bu doğrultuda düzenlenecek.
 
     img_format= str(img_format_finder(ndir_name))
     img_name_list = read_image_list(ndir_name)
+    # Eger tekrarlı hata enj olursa hata uygulanmıs resimler, ana listeden cikarilarak img_name_list olusturulur.
+    if last_fi_name_list is not None:
+        img_name_list = list_substractor(img_name_list, last_fi_name_list)
+
     fault_rate = int(fault_rate)/100
+    fimp_val = int(int(len(img_name_list))*int(fimp_rate)/100)
     random_value = 0
 
     ## TOF Fault Types##
@@ -53,10 +58,18 @@ def main(ndir_name, fdir_name, camera_type, fault_type, fault_rate, randomized):
     fi_image_name_list = []
 
     if randomized is False:
-        multi_fault_applier(img_name_list, ndir_name, fdir_name, img_format,\
-             camera_type, fault_type, fault_rate)
-        done = "Full Injection Completed!"
+        if fimp_rate != 100:
+            fi_image_name_list = random_fault_applier(img_name_list, ndir_name, fdir_name, img_format,\
+                camera_type, fault_type, fault_rate, fimp_val)
+            done = "Partial Injection Completed!\nFault Injected Image Value: "+str(fimp_val)+"/"+str(len(img_name_list))
+            fi_image_name_list.sort()
+        else:
+            multi_fault_applier(img_name_list, ndir_name, fdir_name, img_format,\
+                camera_type, fault_type, fault_rate)
+            done = "Full Injection Completed! Fault applied to all images."
     else:
+        if fimp_rate != 100:
+            print("Randomized function cannot be applicable Fault Implementation Value type FI!")
         length = len(img_name_list)
         random_value = random.randrange(length)
         fi_image_name_list = random_fault_applier(img_name_list, ndir_name,\
@@ -65,12 +78,15 @@ def main(ndir_name, fdir_name, camera_type, fault_type, fault_rate, randomized):
             "----------------------------------\nFault Injected Image Value: "+\
                 str(random_value)+"/"+str(len(img_name_list))
         fi_image_name_list.sort()
-
+    
     return done, len(img_name_list), fi_image_name_list
 
+def list_substractor(norm_img_list, fi_img_list):
+    return [x for x in norm_img_list if x not in fi_img_list]
+    
 def read_image_list(file_path):
     """
-    TOF Resim klasöründeki resimlerin isimlerini bir listeye kaydeder.
+    TOF saves the names of the images in the Image folder in a list.
     """
     onlyfiles = [f for f in listdir(file_path) if isfile(join(file_path, f))]
     image_list = [i.split(".",1)[0] for i in onlyfiles]
@@ -79,7 +95,7 @@ def read_image_list(file_path):
 def multi_fault_applier(img_name_list, ndir_name, fdir_name, img_format, camera_type,\
      fault_type, fault_rate):
     """
-    Bir resim listesine çoklu hata uygulanmasını sağlar.
+    Allows multiple faults to be applied to a list of images.
     """
     for i, img in enumerate(img_name_list):
         image_name = [i,img]
@@ -91,7 +107,7 @@ def multi_fault_applier(img_name_list, ndir_name, fdir_name, img_format, camera_
 def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, camera_type,\
      fault_type, fault_rate, random_value):
     """
-    Rastgele sayıda resim üzerinde hata enjeksiyonu yapmaya yarayan test fonksiyonudur.
+    It is a test function for injecting faults on a random number of images.
     """
     fi_image_name_list = []
 
@@ -130,11 +146,11 @@ def random_fault_applier(img_name_list,ndir_name, fdir_name, img_format, camera_
 
     return fi_image_name_list
 
+
 def img_format_finder(ndir_name):
     """
-    Bu fonksiyon, normal resim veritabanından alınan resimlerin hangi
-    formatta olduklarını okur, hatalı resimler de aynı formatta
-    çıkarılır.
+    This function reads the format of the images taken from the normal
+    image database, and the faulty images are output in the same format.
     """
     one_image = os.listdir(ndir_name)[0]
     img_format = "." + one_image.split(".",2)[1]
