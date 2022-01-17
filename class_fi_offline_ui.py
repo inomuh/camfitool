@@ -3,6 +3,7 @@
 """
 Offline Fault Injection Python Class For Camera FI Demo Tool
 """
+
 import os
 import sys
 import cv2
@@ -106,8 +107,8 @@ class OfflineImageFault:
             - Motion-blur -> motion_blur()
             - Partialloss -> partialloss()
         """
-        # Normalde fault rate yüzdelik olarak geldiğinden
-        # (TOF için düzenlenmişti), o değerin 0-20 aralığına getirilmesi sağlandı.
+        # Normally, since the fault rate comes as a percentage (it was arranged for TOF),
+        # it is provided to bring that value to the range of 0-20.
         fi_rate = int(self.fault_rate * 20)
         kernel = np.ones((fi_rate,fi_rate),np.uint8)
         try:
@@ -132,7 +133,6 @@ class OfflineImageFault:
                     print("This fault cannot be found. Try again...")
                     sys.exit()
 
-            #img_format = ".png" # RGB tipinde kaydetmek için. Değiştirilebilir.
             image_name = str(self.img_name + self.img_format)
             # saving faulty tof image
             cv2.imwrite(os.path.join(self.fdir_name, image_name), image_file)
@@ -143,25 +143,25 @@ class OfflineImageFault:
     ### TOF Faults ###
     @classmethod
     def salt_pepper(cls, fi_rate):
-        """Salt&Pepper Gürültüsü"""
+        """Salt&Pepper Noise"""
         aug_img = iaa.SaltAndPepper(p = fi_rate)
         return aug_img
 
     @classmethod
     def gaussian(cls, fi_rate):
-        """Gaussian Gürültüsü"""
+        """Gaussian Noise"""
         aug_img = iaa.AdditiveGaussianNoise(loc=0, scale=fi_rate*255)
         return aug_img
 
     @classmethod
     def laplacian(cls, fi_rate): # Will Be Added.
-        """Laplacian Gürültüsü (Under-development)"""
+        """Laplacian Noise (Under-development)"""
         aug_img = iaa.AdditiveLaplaceNoise(loc=0, scale=fi_rate*255)
         return aug_img
 
     @classmethod
     def poisson(cls, fi_rate):
-        """Poisson Gürültüsü"""
+        """Poisson Noise"""
         fi_rate = float(fi_rate*100)
         aug_img = iaa.AdditivePoissonNoise(lam=fi_rate, per_channel=True)
         return aug_img

@@ -58,7 +58,7 @@ class RealtimeFaultInjector:
         self.fi_pub_rate = fi_pub_rate
 
         rospy.init_node("camera_fault_injection_demo_tool_node",anonymous=True)
-        # Robot kamera bilgisi arayüzden gelecek.
+        # Robot camera information will come from the interface.
         rospy.Subscriber(robot_camera, Image, self.camera_callback)
         #rospy.Subscriber("right_rokos/color_camera/image_raw", Image, self.camera_callback)
         rospy.spin()
@@ -105,14 +105,15 @@ class RealtimeFaultInjector:
             cv2.imshow("CV2 Screen",img)
             cv2.waitKey(1)
             print("test")
-            ### cv2_screen değişkeni işaretliyse basılan hatayı cv2 ekranında gösterir.
+            ### If the cv2_screen variable is checked, it will show the printed
+            # fault on the cv2 screen.
             #os.system("gnome-terminal -x python cv2_show.py")
 
         else:
             self.camera_fault_publisher(img, self.robot_camera, self.camera_type, self.fi_pub_rate)
 
     def camera_fault_publisher(self, msg, robot_camera, camera_type, rate):
-        """Hata enjekte edilmiş yayını, ROS düğümüne verir."""
+        """Delivers the fault-injected broadcast to the ROS node."""
         pub_camera = rospy.Publisher(robot_camera, Image, queue_size=10)
         #pub_camera = rospy.Publisher("right_rokos/color_camera/image_raw", Image, queue_size=10)
         if camera_type == "TOF":
@@ -127,7 +128,7 @@ class RealtimeFaultInjector:
     @classmethod
     def read_image_list(cls, file_path):
         """
-        Resim klasöründeki resimlerin isimlerini bir listeye kaydeder.
+        Saves the names of the images in the image folder in a list.
         """
         onlyfiles = [f for f in listdir(file_path) if isfile(join(file_path, f))]
         image_list = [i.split(".",1)[0] for i in onlyfiles]
@@ -136,19 +137,9 @@ class RealtimeFaultInjector:
     @classmethod
     def fault_rate_calc(cls, fi_rate):
         """
-        Hata oranının hesaplanıp kernel olarak dönüştürüldüğü fonksiyondur
+        It is the function where the fault rate is calculated and converted as a kernel.
         """
         fi_rate = int(fi_rate)
         kernel = np.ones((fi_rate,fi_rate),np.uint8)
 
         return kernel
-
-#if __name__ == "__main__":
-#    cv2_screen = False
-#    camera_type = "RGB"
-#    robot_camera = "right_rokos/color_camera/image_raw"
-#    publish_camera = "right_rokos/color_camera/image_raw_faulty"
-#    fault_type = "Erosion"
-#    fault_rate = 5
-#    RealtimeFaultInjector(robot_camera, publish_camera, camera_type,\
-#  fault_type, fault_rate, cv2_screen)
