@@ -17,7 +17,6 @@ import sys
 import os
 from os import listdir
 from os.path import isfile, join
-import subprocess
 import datetime
 import time
 
@@ -224,6 +223,20 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui_int.camera_type_combobox.addItems(['--Select one--',
                 'TOF (Under-development)','RGB'])
 
+            # Closing all image folder selection menus
+            self.ui_int.image_file_tree.setEnabled(False)
+            self.ui_int.fi_file_tree.setEnabled(False)
+            self.ui_int.fault_imp_rate_frame.setEnabled(False)
+            self.ui_int.fault_imp_rate_label.setEnabled(False)
+            # Find Image File Button disabling
+            self.ui_int.find_image_file_button.setEnabled(False)
+            self.ui_int.find_image_file_button.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                                        "color: rgb(222, 222, 222);")
+            # Find FI Image File Button disabling
+            self.ui_int.find_fi_file_button.setEnabled(False)
+            self.ui_int.find_fi_file_button.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                                        "color: rgb(222, 222, 222);")
+
         elif self.ui_int.fi_type_combobox.currentText() == "Offline":
             self.ui_int.robot_camera_combobox.clear()
             self.ui_int.robot_camera_combobox.addItems(['None'])
@@ -233,6 +246,21 @@ class MainWindow(QtWidgets.QMainWindow):
             # It will be deleted when TOF Realtime feature is added.
             self.ui_int.camera_type_combobox.clear()
             self.ui_int.camera_type_combobox.addItems(['--Select one--','TOF','RGB'])
+
+            # Opening all image folder selection menus
+            self.ui_int.image_file_tree.setEnabled(True)
+            self.ui_int.fi_file_tree.setEnabled(True)
+            self.ui_int.fault_imp_rate_frame.setEnabled(True)
+            self.ui_int.fault_imp_rate_label.setEnabled(True)
+
+            # Find Image File Button enabling
+            self.ui_int.find_image_file_button.setEnabled(True)
+            self.ui_int.find_image_file_button.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                                        "color: rgb(0, 0, 0);")
+            # Find FI Image File Button enabling
+            self.ui_int.find_fi_file_button.setEnabled(True)
+            self.ui_int.find_fi_file_button.setStyleSheet("background-color: rgb(255, 255, 255);"
+                                                        "color: rgb(0, 0, 0);")
 
         else:
             self.ui_int.robot_camera_combobox.clear()
@@ -487,9 +515,13 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.pop_up_message("Please enter a valid frequency value!")
                     self.error_log(ValueError)
                 else:
+                    # Realtime FI process
                     rfi(self.robot_camera, self.publish_camera, self.camera_type,\
                         self.fault_type, self.fault_rate, self.fi_freq, cv2_screen)
 
+                    # Farklı bir terminalden realtime fonksiyonun çalıştırılması için
+                    # os.system kullanılır.
+                    
 
         else:
             self.pop_up_message("Something is wrong! You should check your fault configuration.")
@@ -517,24 +549,29 @@ class MainWindow(QtWidgets.QMainWindow):
         self.fi_type = self.ui_int.fi_type_combobox.currentText()
         self.fault_type = self.ui_int.fault_type_combobox.currentText()
 
-    def info_temp(self):
-        # This function will be updated.
-        """
-        It is the function that writes the properties defined in the Camera Fault Configuration menu
-        to the Info section. For this, it saves the configs in a temporary file called temp.txt,
-        writes the revised info from that file to the Info tab and deletes the temp file.
-        """
-        try:
-            self.robot_camera_type = self.ui_int.robot_camera_combobox.currentText()
-            self.camera_type = self.ui_int.camera_type_combobox.currentText()
-            self.fi_type = self.ui_int.fi_type_combobox.currentText()
-            self.fault_type = self.ui_int.fault_type_combobox.currentText()
+    def folder_info_temp(self):
+        """This function takes fault injection configuration infos"""
+        self.fi_type = self.ui_int.fi_type_combobox.currentText()
+        self.robot_camera_type = self.ui_int.robot_camera_combobox.currentText()
+        self.camera_type = self.ui_int.camera_type_combobox.currentText()
+        self.fault_type = self.ui_int.fault_type_combobox.currentText()
+
+        if self.fi_type == "Offline":
             self.normal_image_folder = str(self.get_current_workspace())+\
                 "/images/normal_image_folders/"+\
                         str(self.ui_int.image_file_tree.selectedIndexes()[0].data())+"/"
             # Normal img kütüphanesindeki resimlerin isimleri kaydedilir.
             self.normal_image_list = self.read_image_list(self.normal_image_folder)
 
+    def info_temp(self):
+        # This function will be updated.
+        """
+        It is the function that writes the properties defined in the Camera Fault Configuration menu
+        to the Info section (from folder_info_temp func). For this, it saves the configs in a temporary file called temp.txt,
+        writes the revised info from that file to the Info tab and deletes the temp file.
+        """
+        self.folder_info_temp()
+        try:
             if self.fi_type == "Offline":
                 with open("temp.txt", "a", encoding="utf-8") as temp_file:
                     temp_file.write("Robot Camera: ")
@@ -782,9 +819,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 # the topic of the published camera, and publish_camera is
                 # another desired topic name.
                 robot_camera = self.ui_int.ros_cam_topic_text.toPlainText()
-                #os.system("gnome-terminal -x rosrun image_view image_view image:="+robot_camera)
-                subprocess.call("gnome-terminal -x rosrun image_view image_view image:="+\
-                    robot_camera)
+                os.system("gnome-terminal -x rosrun image_view image_view image:="+robot_camera)
+                #subprocess.call("gnome-terminal -x rosrun image_view image_view image:="+ robot_camera, shell=False)
             else:
                 self.pop_up_message('ROS Camera connection failed.')
 
