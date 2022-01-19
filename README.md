@@ -19,7 +19,7 @@ For trying ROS package version of CamFITool:
 ![Image of CamFIDemoTool_v1.2_offline](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3_offline.png)
 *Fig 1. Camera Fault Injector Tool Offline FI Configuration*
 
-![Image of CamFIDemoTool_v1.2_realtime](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3_offline.png)
+![Image of CamFIDemoTool_v1.2_realtime](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3_realtime.png)
 *Fig 2. Camera Fault Injector Tool Realtime FI Configuration*
 
 ### Tool Features (in v1.3)
