@@ -24,17 +24,17 @@ For trying ROS package version of CamFITool (v1.3):
 
 ### Tool Features (in v1.4)
 ---------------------------
-- You can apply the faults you choose in the configuration menu to the images in the image library you want, and save these wrong images to the folder you want. So you can create your faulty image library.
-- You can apply these faults to all images as well as to a random number of images, creating a mixed library of faulty images without touching the remaining images (only offline fault application).
-- You can save the configuration of the fault you have applied, and view the fault plans you have saved as you wish.
-- You can specify the rate of fault to be applied.
-- Three different fault types can be applied offline to images (with .bmp extension) obtained from TOF camera and six different fault types can be applied offline to images (with .png/.jpg extension) obtained from RGB camera.
-- **NEW** It is now possible to select what percentage of images in the normal image database to apply an error.
-- **NEW** It is possible to inject two different error types into a normal image database at desired rates (it is not possible to apply more than two errors to the same database yet).
-- For now, six different fault types can be applied real-time stream obtained from RGB camera (TOF Realtime FI will be added).
-- You can use the ROS Noetic version (noetic-version) or the standard version (current v1.2.3).
+- You can apply the faults you choose from the configuration menu to the images in the image library you want and save these wrong images to the folder you want. So you can create your faulty image library.
+- You can apply these bugs to all images and also to any number of images, creating a mixed library of bad images without touching the remaining images (offline mode only).
+- You can save the configuration of the fault you applied and view the fault plans you saved as you wish.
+- You can specify the fault rate to be applied.
+- You can inject 6 different types of fault into .bmp images taken from robotic cameras (other image formats are in the testing phase).
+- It is possible to choose what percentage of the images in the normal image database to apply fault.
+- It is possible to inject two different fault types at desired rates into a normal image database (it is not yet possible to apply more than two faults to the same database).
+- For now, three different fault types (Gradient, Dilation, Erosion) can be applied to the real-time stream obtained from ROS camera topics. Other fault types are being tested.
+- You can use the ROS Noetic version (noetic version) or the standard version. (ROS version will be updated)
 - You can monitor the ROS Camera node.
-- You can specify the rate of real-time fault injecting frequency to be applied.
+- You can specify the realtime fault injection frequency rate to be applied.
 
 ---
 
@@ -80,6 +80,13 @@ Update v1.3 - 17.01.22
 - Added a log system to keep the names of the images that were injected and not.
 - Some bug fixes.
 
+Update v1.4 - 26.08.22
+------------------------
+- The interface has been updated, the unnecessary buttons have been assigned to the upper toolbar.
+- Changed the separation of TOF and RGB in camera fault types. All fault types can now be applied to all image types.
+- Removed Open, Close and Motionblur fault types.
+- The FI Anomaly Detector plugin has been developed. In order to use this plugin from CamFITool, it is enough to download the plugin from its own repository. Thanks to this plugin, it will be possible to detect anomaly in pictures with CamFITool.
+
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
 -------------------------
@@ -95,6 +102,7 @@ Roadmap For Next Updates:
 * [x] [CamFITool Pypi package](https://pypi.org/project/camfitool/) (This is Alpha version)
 * [x] Reset Button
 * [x] Mixed Fault Injection
+* [x] Fault Types Rework
 * [ ] Real-Time TOF Faults integration
 * [ ] CV2 Screen option
 * [x] ROS Noetic Integration
