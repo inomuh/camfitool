@@ -39,7 +39,7 @@ class RealtimeFaultInjector:
     ###### Created by AKE - 23.08.22
     """
 
-    def __init__(self,robot_camera, publish_camera, fault_type,\
+    def __init__(self,robot_camera, publish_camera, fault_type,
          fault_rate, fi_pub_rate, cv2_screen=False):
 
         """Main Function"""
