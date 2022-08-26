@@ -85,7 +85,7 @@ Update v1.4 - 26.08.22
 - The interface has been updated, the unnecessary buttons have been assigned to the upper toolbar.
 - Changed the separation of TOF and RGB in camera fault types. All fault types can now be applied to all image types.
 - Removed Open, Close and Motionblur fault types.
-- The FI Anomaly Detector plugin has been developed. In order to use this plugin from CamFITool, it is enough to download the plugin from its own repository. Thanks to this plugin, it will be possible to detect anomaly in pictures with CamFITool.
+- The [FI Anomaly Detector](https://github.com/inomuh/FI-Anomaly-Detector) plugin has been developed. In order to use this plugin from CamFITool, it is enough to download the plugin from its own repository. Thanks to this plugin, it will be possible to detect anomaly in pictures with CamFITool.
 
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
