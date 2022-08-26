@@ -17,22 +17,16 @@ class RealtimeImageFault:
         - fault_type: Choosing fault type
         - fault_rate: Fault rate (%)
 
-
-    ### TOF Image Faults (Under-development):
-        - Salt&Pepper -> salt_pepper()
-        - Gaussian -> gaussian()
-        - Poisson -> poisson()
-
-    ### RGB Image Faults:
-        - Open -> open_fault()
-        - Close -> close_fault()
+    ### Image Faults :
+        - Salt&Pepper -> salt_pepper() (Under-development)
+        - Gaussian -> gaussian() (Under-development)
+        - Poisson -> poisson() (Under-development)
         - Erosion -> erosion()
         - Dilation -> dilation()
         - Gradient -> gradient()
-        - Motion-blur -> motion_blur()
-        - Partialloss -> partialloss()
+        - Partialloss -> partialloss() (Under-development)
 
-    ###### Created by AKE - 04.11.21
+    ###### Created by AKE - 23.08.22
     """
     def __init__(self, image, kernel, fault_type, fault_rate):
         self.img = image
@@ -40,14 +34,6 @@ class RealtimeImageFault:
         self.fault_type = fault_type
         self.fault_rate = fault_rate
         self.bridge = CvBridge()
-
-    def open_fault(self):
-        """Open Fault Method"""
-        return cv2.morphologyEx(self.img, cv2.MORPH_OPEN, self.kernel)
-
-    def close_fault(self):
-        """Close Fault Method"""
-        return cv2.morphologyEx(self.img, cv2.MORPH_CLOSE, self.kernel)
 
     def dilation(self):
         """Dilation Fault Method"""
@@ -63,10 +49,6 @@ class RealtimeImageFault:
 
     def partialloss(self):
         """Partialloss Fault Method (Under-development)"""
-
-    def motion_blur(self):
-        """Motion-blur Fault Method"""
-        return cv2.blur(self.img,(5,5))
 
     def saltpepper(self):
         """Salt&Pepper Fault Method (Under-development)"""
