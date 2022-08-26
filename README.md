@@ -5,36 +5,36 @@
 
 ![current_version](https://img.shields.io/github/v/release/inomuh/camfitool?color=green) ![last_commit](https://img.shields.io/github/last-commit/inomuh/Camera-Fault-Injection-Tool?color=green) ![tool version](https://img.shields.io/badge/version-standart-blue) ![repo_size](https://img.shields.io/github/repo-size/inomuh/Camera-Fault-Injection-Tool) ![Apache-2.0 License](https://img.shields.io/github/license/inomuh/Camera-Fault-Injection-Tool?color=blue) ![lang](https://img.shields.io/github/languages/top/inomuh/camfitool)
 
-This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
+This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
 
 Developed by Alim Kerem Erdogmus from Inovasyon Muhendislik (c) 2021
 
 ROS Wiki page: http://wiki.ros.org/camfitool
 
-For trying ROS package version of CamFITool:
+For trying ROS package version of CamFITool (v1.3):
 
     git clone https://github.com/inomuh/camfitool -b noetic-version
     
 
-![Image of CamFIDemoTool_v1.3_offline](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3_offline.png)
+![Image of CamFIDemoTool_v1.3_offline](https://github.com/Akerdogmus/camfitool/blob/v1.4/camfitool_v1.4_offline.png)
 *Fig 1. Camera Fault Injection Tool Offline FI Configuration*
 
-![Image of CamFIDemoTool_v1.3_realtime](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3.1_realtime.png)
+![Image of CamFIDemoTool_v1.3_realtime](https://github.com/Akerdogmus/camfitool/blob/v1.4/camfitool_v1.4_realtime.png)
 *Fig 2. Camera Fault Injection Tool Realtime FI Configuration*
 
-### Tool Features (in v1.3)
+### Tool Features (in v1.4)
 ---------------------------
-- You can apply the faults you choose in the configuration menu to the images in the image library you want, and save these wrong images to the folder you want. So you can create your faulty image library.
-- You can apply these faults to all images as well as to a random number of images, creating a mixed library of faulty images without touching the remaining images (only offline fault application).
-- You can save the configuration of the fault you have applied, and view the fault plans you have saved as you wish.
-- You can specify the rate of fault to be applied.
-- Three different fault types can be applied offline to images (with .bmp extension) obtained from TOF camera and six different fault types can be applied offline to images (with .png/.jpg extension) obtained from RGB camera.
-- **NEW** It is now possible to select what percentage of images in the normal image database to apply an error.
-- **NEW** It is possible to inject two different error types into a normal image database at desired rates (it is not possible to apply more than two errors to the same database yet).
-- For now, six different fault types can be applied real-time stream obtained from RGB camera (TOF Realtime FI will be added).
-- You can use the ROS Noetic version (noetic-version) or the standard version (current v1.2.3).
+- You can apply the faults you choose from the configuration menu to the images in the image library you want and save these wrong images to the folder you want. So you can create your faulty image library.
+- You can apply these bugs to all images and also to any number of images, creating a mixed library of bad images without touching the remaining images (offline mode only).
+- You can save the configuration of the fault you applied and view the fault plans you saved as you wish.
+- You can specify the fault rate to be applied.
+- You can inject 6 different types of fault into .bmp images taken from robotic cameras (other image formats are in the testing phase).
+- It is possible to choose what percentage of the images in the normal image database to apply fault.
+- It is possible to inject two different fault types at desired rates into a normal image database (it is not yet possible to apply more than two faults to the same database).
+- For now, three different fault types (Gradient, Dilation, Erosion) can be applied to the real-time stream obtained from ROS camera topics. Other fault types are being tested.
+- You can use the ROS Noetic version (noetic version) or the standard version. (ROS version will be updated)
 - You can monitor the ROS Camera node.
-- You can specify the rate of real-time fault injecting frequency to be applied.
+- You can specify the realtime fault injection frequency rate to be applied.
 
 ---
 
@@ -80,6 +80,13 @@ Update v1.3 - 17.01.22
 - Added a log system to keep the names of the images that were injected and not.
 - Some bug fixes.
 
+Update v1.4 - 26.08.22
+------------------------
+- The interface has been updated, the unnecessary buttons have been assigned to the upper toolbar.
+- Changed the separation of TOF and RGB in camera fault types. All fault types can now be applied to all image types.
+- Removed Open, Close and Motionblur fault types.
+- The FI Anomaly Detector plugin has been developed. In order to use this plugin from CamFITool, it is enough to download the plugin from its own repository. Thanks to this plugin, it will be possible to detect anomaly in pictures with CamFITool.
+
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
 -------------------------
@@ -95,8 +102,7 @@ Roadmap For Next Updates:
 * [x] [CamFITool Pypi package](https://pypi.org/project/camfitool/) (This is Alpha version)
 * [x] Reset Button
 * [x] Mixed Fault Injection
-* [ ] Real-Time TOF Faults integration
-* [ ] CV2 Screen option
+* [x] Fault Types Rework
 * [x] ROS Noetic Integration
 * [ ] More Fault Types
 * [ ] ROS2 Integration
