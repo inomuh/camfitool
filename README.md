@@ -5,24 +5,24 @@
 
 ![current_version](https://img.shields.io/github/v/release/inomuh/camfitool?color=green) ![last_commit](https://img.shields.io/github/last-commit/inomuh/Camera-Fault-Injection-Tool?color=green) ![tool version](https://img.shields.io/badge/version-standart-blue) ![repo_size](https://img.shields.io/github/repo-size/inomuh/Camera-Fault-Injection-Tool) ![Apache-2.0 License](https://img.shields.io/github/license/inomuh/Camera-Fault-Injection-Tool?color=blue) ![lang](https://img.shields.io/github/languages/top/inomuh/camfitool)
 
-This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to TOF and RGB type ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
+This tool is a simple interface that allows injection of image faults into robot cameras. Thanks to this interface, you can create new image libraries by injecting the fault types you have determined, both real-time to ROS cameras, and to the image libraries previously recorded by these cameras. For more information about the purpose of this tool: https://arxiv.org/abs/2108.13803
 
 Developed by Alim Kerem Erdogmus from Inovasyon Muhendislik (c) 2021
 
 ROS Wiki page: http://wiki.ros.org/camfitool
 
-For trying ROS package version of CamFITool:
+For trying ROS package version of CamFITool (v1.3):
 
     git clone https://github.com/inomuh/camfitool -b noetic-version
     
 
-![Image of CamFIDemoTool_v1.3_offline](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3_offline.png)
+![Image of CamFIDemoTool_v1.3_offline](https://github.com/inomuh/camfitool/blob/v1.4/camfitool_v1.4_offline.png)
 *Fig 1. Camera Fault Injection Tool Offline FI Configuration*
 
-![Image of CamFIDemoTool_v1.3_realtime](https://github.com/inomuh/camfitool/blob/v1.3/camfitool_v1.3.1_realtime.png)
+![Image of CamFIDemoTool_v1.3_realtime](https://github.com/inomuh/camfitool/blob/v1.4/camfitool_v1.4_realtime.png)
 *Fig 2. Camera Fault Injection Tool Realtime FI Configuration*
 
-### Tool Features (in v1.3)
+### Tool Features (in v1.4)
 ---------------------------
 - You can apply the faults you choose in the configuration menu to the images in the image library you want, and save these wrong images to the folder you want. So you can create your faulty image library.
 - You can apply these faults to all images as well as to a random number of images, creating a mixed library of faulty images without touching the remaining images (only offline fault application).
