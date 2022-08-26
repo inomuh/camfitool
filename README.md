@@ -16,10 +16,10 @@ For trying ROS package version of CamFITool (v1.3):
     git clone https://github.com/inomuh/camfitool -b noetic-version
     
 
-![Image of CamFIDemoTool_v1.3_offline](https://github.com/inomuh/camfitool/blob/v1.4/camfitool_v1.4_offline.png)
+![Image of CamFIDemoTool_v1.3_offline](https://github.com/Akerdogmus/camfitool/blob/v1.4/camfitool_v1.4_offline.png)
 *Fig 1. Camera Fault Injection Tool Offline FI Configuration*
 
-![Image of CamFIDemoTool_v1.3_realtime](https://github.com/inomuh/camfitool/blob/v1.4/camfitool_v1.4_realtime.png)
+![Image of CamFIDemoTool_v1.3_realtime](https://github.com/Akerdogmus/camfitool/blob/v1.4/camfitool_v1.4_realtime.png)
 *Fig 2. Camera Fault Injection Tool Realtime FI Configuration*
 
 ### Tool Features (in v1.4)
@@ -103,8 +103,6 @@ Roadmap For Next Updates:
 * [x] Reset Button
 * [x] Mixed Fault Injection
 * [x] Fault Types Rework
-* [ ] Real-Time TOF Faults integration
-* [ ] CV2 Screen option
 * [x] ROS Noetic Integration
 * [ ] More Fault Types
 * [ ] ROS2 Integration
