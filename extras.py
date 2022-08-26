@@ -15,7 +15,7 @@ def reset_button_function():
 
 def go_fiad_app_func():
     """When the GO FIAD button clicked, open the fiad app"""
-    os.system("python3 fi_anomaly_detector_main.py")
+    os.system("/usr/bin/python3 fi_anomaly_detector_main.py")
 
 
 def list_substractor(norm_img_list, fi_img_list):
