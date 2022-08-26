@@ -607,7 +607,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 )
                 # Normal img kütüphanesindeki resimlerin isimleri kaydedilir.
                 self.normal_image_list = ext.read_image_list(self.normal_image_folder)
-            except:
+            except IndexError:
                 self.pop_up_message(
                     "Please select a fault type from the fault type combobox."
                 )
