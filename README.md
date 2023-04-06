@@ -87,6 +87,12 @@ Update v1.4 - 26.08.22
 - Removed Open, Close and Motionblur fault types.
 - The [FI Anomaly Detector](https://github.com/inomuh/FI-Anomaly-Detector) plugin has been developed. In order to use this plugin from CamFITool, it is enough to download the plugin from its own repository. Thanks to this plugin, it will be possible to detect anomaly in pictures with CamFITool.
 
+Update v2.0 - 06.04.2023
+------------------------
+- Fault Injection Anomaly Detector (FIAD) plugin has been added. Thanks to this plugin, it is possible to detect errors in images by using the models you have trained with CNN algorithms (Note: Models and images are not shared because they are used within the VALU3S project).
+- Help and About sections have been activated [https://github.com/inomuh/camfitool/issues/4].
+- Some bug fixes and improvements.
+
 ---------------------------------------------------------------------------------
 Roadmap For Next Updates:
 -------------------------
@@ -107,7 +113,7 @@ Roadmap For Next Updates:
 * [ ] More Fault Types
 * [ ] ROS2 Integration
 * [x] Error Log System
-* [ ] Improved Help Section
+* [x] Improved Help Section
 * [x] [CamFITool ROS Package version](https://github.com/inomuh/camfitool/tree/noetic-version)
 
 ### Credits
@@ -132,7 +138,7 @@ This work is supported by [TÜBİTAK](https://www.tubitak.gov.tr/) Project under
   
 ## Cite
 
-If the code or data help you, please cite the following the paper.
+If the code or data help you, please cite the following the papers.
 
     @article{erdogmus2021manipulation,
       title={Manipulation of Camera Sensor Data via Fault Injection for Anomaly Detection Studies in Verification and Validation Activities For AI},
@@ -140,6 +146,20 @@ If the code or data help you, please cite the following the paper.
       journal={arXiv preprint arXiv:2108.13803},
       year={2021}
     }
+    
+    @research article { ogummf1054761, 
+        journal = {Eskişehir Osmangazi Üniversitesi Mühendislik ve Mimarlık Fakültesi Dergisi}, 
+        eissn = {2630-5712}, address = {mmfdergi@ogu.edu.tr}, 
+        publisher = {Eskişehir Osmangazi University}, 
+        year = {2022}, 
+        volume = {30}, 
+        number = {3}, 
+        pages = {328 - 339}, 
+        doi = {10.31796/ogummf.1054761}, 
+        title = {DEVELOPMENT OF A FAULT INJECTION TOOL \& DATASET FOR VERIFICATION OF CAMERA BASED PERCEPTION IN ROBOTIC SYSTEMS}, 
+        key = {cite}, 
+        author = {Yayan, Uğur and Erdoğmuş, Alim Kerem} 
+     }
 
 ### License
 
