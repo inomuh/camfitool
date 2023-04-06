@@ -118,8 +118,8 @@ Roadmap For Next Updates:
 
 ### Credits
 
-<a href="http://valu3s.eu">
-  <img align=left img src="https://upload.wikimedia.org/wikipedia/tr/d/d0/TUBITAK-Logo.jpg" 
+<a href="tübitak_logo">
+  <img align=left img src="https://www.tubitak.gov.tr/sites/default/files/tubitak_logo.png" 
        alt="tübitak_logo" height="100" >
 </a>
 
