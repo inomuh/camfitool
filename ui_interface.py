@@ -658,7 +658,7 @@ class Ui_MainWindow(object):
         self.info_label.setText(_translate("MainWindow", "Info"))
         self.fi_plan_label.setText(_translate("MainWindow", "FI Plans"))
         self.progressBar_label.setText(_translate("MainWindow", "FI Applying Progress"))
-        self.version_info_label.setText(_translate("MainWindow", "Version 1.4"))
+        self.version_info_label.setText(_translate("MainWindow", "Version 2.0"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
         self.menuAbout.setTitle(_translate("MainWindow", "About"))

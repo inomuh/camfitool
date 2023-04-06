@@ -6,21 +6,28 @@ tutulduğu scripttir. Main üzerinden çağrılarak fonksiyonlar kullanılır.
 import os
 from os import listdir
 from os.path import isfile, join
+import subprocess
 import datetime
 from gui_restart_app import restart_program as rest
+import webbrowser
+
 
 def reset_button_function():
     """When the reset button clicked, all interface will be reset"""
     rest()
 
+
 def go_fiad_app_func():
     """When the GO FIAD button clicked, open the fiad app"""
-    os.system("/usr/bin/python3 fi_anomaly_detector_main.py")
+    # os.system("/usr/bin/python3 fi_anomaly_detector_main.py")
+    # subprocess.Popen('/usr/bin/python3 fi_anomaly_detector_main.py', shell=False)
+    subprocess.Popen(['/usr/bin/python3', 'fi_anomaly_detector_main.py'])
 
 
 def list_substractor(norm_img_list, fi_img_list):
     """Liste ayırıcı"""
     return [x for x in norm_img_list if x not in fi_img_list]
+
 
 def read_image_list(file_path):
     """
@@ -30,12 +37,14 @@ def read_image_list(file_path):
     image_list = [i.split(".", 1)[0] for i in onlyfiles]
     return image_list
 
+
 def get_current_workspace():
     """
     It is the function that gives the workspace location where the Tool works.
     """
     file_full_path = os.path.dirname(os.path.realpath(__file__))
     return file_full_path
+
 
 def error_log_creator(msg_data):
     """
@@ -61,6 +70,7 @@ def error_log_creator(msg_data):
     ) as error_log:
         error_log.write(f"ERROR: {curr_date.ctime()}:\n---\n {msg_data}\n")
 
+
 def get_class_names(train_dir):
     """
     Sınıf isimlerini yükler.
@@ -73,8 +83,24 @@ def get_class_names(train_dir):
     class_names = np.array(sorted([item.name for item in data_dir.glob("*")]))
     return class_names
 
+
 def str_splitter(str_to_split):
     """
     Stringi split eder.
     """
     return str_to_split.split("/")[-1]
+
+
+def open_website(url):
+    webbrowser.open(url)
+
+def camfitool_web(self):
+    url = "https://github.com/inomuh/camfitool"
+    open_website(url)
+    # self.pop_up_info_message('This section will be added!')
+def valu3s_web(self):
+    url="https://valu3s.eu"
+    open_website(url)
+def imtgd_web(self):
+    url="https://www.inovasyonmuhendislik.com/"
+    open_website(url)

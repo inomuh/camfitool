@@ -9,7 +9,7 @@ to ROS cameras, and to the image libraries previously
 recorded by these cameras.
 """
 __author__ = "Alim Kerem Erdogmus"
-__version__ = "v1.4.0"
+__version__ = "v2.0.0"
 __email__ = "kerem.erdogmus@inovasyonmuhendislik.com"
 __status__ = "Beta"
 
@@ -88,10 +88,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui_int.actionROS_Camera.triggered.connect(lambda: self.robot_camera_live(self.robot_camera))
         self.ui_int.actionGo_Anomaly_Detector.triggered.connect(ext.go_fiad_app_func)
         # Will be added
-        self.ui_int.actionCamFITool.triggered.connect(self.to_be_declared_msg)
-        self.ui_int.actionVALU3S.triggered.connect(self.to_be_declared_msg)
-        self.ui_int.actionIMTGD.triggered.connect(self.to_be_declared_msg)
+        self.ui_int.actionCamFITool.triggered.connect(ext.camfitool_web)
+        self.ui_int.actionVALU3S.triggered.connect(ext.valu3s_web)
+        self.ui_int.actionIMTGD.triggered.connect(ext.imtgd_web)
         ######
+
 
         # When the Robot Camera button is pressed, the ros node in
         # the robot_camera variable is monitored.
@@ -105,7 +106,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # The part where fonts and sizes of ROS Cam Text and ROS Stream Freq tabs are set
         self.default_robot_camera_configs()
 
-        self.ui_int.info_text.setText("Welcome to Camera Fault Injection Tool v1.4")
+        self.ui_int.info_text.setText("Welcome to Camera Fault Injection Tool v2.0")
         self.show()
 
     def starter_folder_indexes(self):
@@ -759,14 +760,18 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         It is the function where the Help button is defined.
         """
+        url = "https://github.com/inomuh/camfitool/wiki"
+        ext.open_website(url)
+
+        """
         msg_box = QtWidgets.QMessageBox()
         msg_box.setIcon(QtWidgets.QMessageBox.Question)
-        msg_box.setInformativeText("Welcome to Camera Fault Injection Tool v1.4\n\n")
+        msg_box.setInformativeText("Welcome to Camera Fault Injection Tool v2.0\n\n")
         msg_box.setDetailedText("TBD") # read text ile ekle.
         msg_box.setWindowTitle("Help")
         msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msg_box.exec()
-
+        """
     @classmethod
     def pop_up_info_message(cls, msg):
         """
@@ -971,9 +976,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui_int.randomize_check.setEnabled(False)
         else:
             self.ui_int.randomize_check.setEnabled(True)
-
-    def to_be_declared_msg(self):
-        self.pop_up_info_message('This section will be added!')
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
