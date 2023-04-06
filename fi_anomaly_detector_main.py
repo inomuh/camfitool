@@ -35,7 +35,7 @@ from PyQt5.QtGui import QPixmap
 
 from PyQt5.QtCore import *
 
-from fi_detector_main_ui_v2_1 import Ui_MainWindow
+from fi_detector_main_ui_v2_2 import Ui_MainWindow
 import extras as ext
 
 import fnmatch
